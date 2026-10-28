@@ -8,19 +8,14 @@ const catalogue = JSON.parse(fs.readFileSync(new URL('../site/data/catalog.json'
 const topics = JSON.parse(fs.readFileSync(new URL('../site/data/topics.json', import.meta.url)));
 const topicMap = Object.fromEntries(topics.map(topic => [topic.id, topic]));
 
-function journey(preferences = {}, hook = 'unsure', method = 'unsure') {
-  const answers = [];
-  while (answers.length < FLOW.length) {
-    const question = getNextQuestion(answers);
-    assert.ok(question, 'Every step has an answerable question');
-    let id = 'unsure';
-    if (question.id === 'hooks') id = hook;
-    else if (question.id === 'methods') id = method;
-    else if (Object.keys(preferences).length) {
-      const candidates = question.options.map(option => ({ option, score: Object.entries(option.topics).reduce((sum, [tag, weight]) => sum + (preferences[tag] || 0) * weight, 0) })).sort((a, b) => b.score - a.score);
-      if (candidates[0].score > 0) id = candidates[0].option.id;
-    }
-    answers.push({ questionId: question.id, optionIds: [id] });
+function journey(preferences = {}) {
+  const answers=[];
+  while(answers.length<FLOW.length) {
+    const question=getNextQuestion(answers);
+    assert.ok(question,'Every step has a question');
+    const positive=Object.entries(question.options[0].topics).some(([tag])=>preferences[tag]>0);
+    const id=`${question.id}_${positive?'yes':'no'}`;
+    answers.push({questionId:question.id,optionIds:[id]});
   }
   return answers;
 }
@@ -46,7 +41,10 @@ test('The full CSV is traceable and additions have official sources', () => {
 test('Every question option uses declared topics and methods', () => {
   const ids = new Set();
   for (const question of Object.values(ALL_QUESTIONS)) {
-    assert.ok(question.options.length >= 4);
+    assert.equal(question.options.length,2);
+    assert.deepEqual(question.options.map(o=>o.label),['はい','いいえ']);
+    assert.deepEqual(question.options[1].topics,{});
+    assert.equal(question.multiple,false);
     for (const option of question.options) {
       assert.equal(ids.has(option.id), false, `Duplicate option ${option.id}`);
       ids.add(option.id);
@@ -56,10 +54,10 @@ test('Every question option uses declared topics and methods', () => {
 });
 
 test('Anime curiosity can lead to folklore, without requiring science-fiction to be real', () => {
-  const first = { questionId: 'hooks', optionIds: ['hook_curse'] };
-  assert.equal(getNextQuestion([first]).id, 'magic');
-  const second = { questionId: 'magic', optionIds: ['magic_people'] };
-  assert.equal(getNextQuestion([first, second]).id, 'folklore');
+  const first = { questionId: 'curse', optionIds: ['curse_yes'] };
+  assert.equal(getNextQuestion([first]).id, 'magic_history');
+  const second = { questionId: 'magic_history', optionIds: ['magic_history_yes'] };
+  assert.equal(getNextQuestion([first, second]).id, 'folklore_people');
   const answers = journey({ folklore: 4, religion: 2, history: 1 }, 'hook_curse', 'method_people');
   const result = recommend(catalogue.labs, answers, 5);
   assert.equal(result.length, 5);
@@ -67,10 +65,10 @@ test('Anime curiosity can lead to folklore, without requiring science-fiction to
   assert.ok(result.every(lab => lab.reasons.length > 0));
 });
 
-test('All unsure is a valid, finite, varied exploration', () => {
+test('All no is a valid, finite, varied exploration', () => {
   const answers = journey();
-  assert.equal(answers.length, 9);
-  assert.equal(new Set(answers.map(answer => answer.questionId)).size, 9);
+  assert.equal(answers.length, 20);
+  assert.equal(new Set(answers.map(answer => answer.questionId)).size, 20);
   assert.equal(getNextQuestion(answers), null);
   assert.deepEqual(normalizeAnswers(answers), answers);
   const result = recommend(catalogue.labs, answers, 10);
@@ -103,19 +101,28 @@ test('Changing the answers changes the recommendations, not only the explanation
 test('Bad counts, forged options and stale branches cannot become valid saved state', () => {
   for (const value of [0, -1, 1.5, 21, '3abc', Infinity, null, '']) assert.throws(() => validateCount(value), RangeError);
   assert.equal(validateCount('5'), 5);
-  assert.deepEqual(normalizeAnswers([{ questionId: 'hooks', optionIds: ['<script>'] }]), []);
-  assert.deepEqual(normalizeAnswers([{ questionId: 'hooks', optionIds: ['unsure', 'hook_curse'] }]), []);
-  const answers = [{ questionId: 'hooks', optionIds: ['hook_curse'] }, { questionId: 'magic', optionIds: ['magic_people'] }, { questionId: 'tech', optionIds: ['tech_ai'] }];
-  assert.equal(normalizeAnswers(answers).length, 2);
+  assert.deepEqual(normalizeAnswers([{questionId:'curse',optionIds:['<script>']}]),[]);
+  assert.deepEqual(normalizeAnswers([{questionId:'curse',optionIds:['curse_yes','curse_no']}]),[]);
+  const answers=[{questionId:'curse',optionIds:['curse_yes']},{questionId:'magic_history',optionIds:['magic_history_yes']},{questionId:'tech',optionIds:['tech_yes']}];
+  assert.equal(normalizeAnswers(answers).length,2);
 });
 
-test('Every starting interest can finish and generate a useful memo', () => {
-  for (const hook of ALL_QUESTIONS.hooks.options) {
-    const answers = journey(hook.topics, hook.id, 'method_read');
-    assert.deepEqual(normalizeAnswers(answers), answers);
-    const result = recommend(catalogue.labs, answers, 3);
-    const memo = summaryText(result, answers, topicMap);
-    assert.ok(memo.includes(result[0].url));
-    assert.ok(memo.includes('同じテーマを研究する他の大学'));
+test('Every topic profile and mixed binary path can finish and generate a useful memo',()=>{
+ for(const question of Object.values(ALL_QUESTIONS)) {
+  const answers=journey(question.options[0].topics);
+  assert.deepEqual(normalizeAnswers(answers),answers);
+  const result=recommend(catalogue.labs,answers,3);
+  const memo=summaryText(result,answers,topicMap);
+  assert.ok(memo.includes(result[0].url));
+  assert.ok(memo.includes('同じテーマを研究する他の大学'));
+ }
+ for(let seed=0;seed<30;seed++) {
+  const answers=[];
+  for(let i=0;i<FLOW.length;i++) {
+   const q=getNextQuestion(answers); const yes=(seed*17+i*7)%5<2;
+   answers.push({questionId:q.id,optionIds:[`${q.id}_${yes?'yes':'no'}`]});
   }
+  assert.equal(new Set(answers.map(a=>a.questionId)).size,20);
+  assert.deepEqual(normalizeAnswers(answers),answers);
+ }
 });

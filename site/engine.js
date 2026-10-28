@@ -1,4 +1,4 @@
-import { ADAPTIVE, ALL_QUESTIONS, FIXED, FLOW, METHODS, UNSURE } from './questions.js';
+import { ADAPTIVE, ALL_QUESTIONS, FLOW, METHODS, METHOD_QUESTIONS } from './questions.js';
 
 export const MIN_COUNT = 1;
 export const MAX_COUNT = 20;
@@ -11,7 +11,7 @@ export function validateCount(value) {
 }
 
 export function optionsFor(question) {
-  return [...question.options, UNSURE];
+  return question.options;
 }
 
 export function buildProfile(answers = []) {
@@ -28,7 +28,7 @@ export function buildProfile(answers = []) {
       selectedIds.add(id);
       for (const [tag, value] of Object.entries(item.topics)) topics[tag] = (topics[tag] || 0) + value;
       for (const [method, value] of Object.entries(item.methods)) methods[method] = (methods[method] || 0) + value;
-      traces.push({ questionId: question.id, question: question.title, optionId: id, label: item.label, topics: item.topics, methods: item.methods });
+      traces.push({ questionId: question.id, question: question.title, optionId: id, label: id.endsWith('_yes') ? question.title : item.label, topics: item.topics, methods: item.methods });
     }
   }
   return { topics, methods, traces, selectedIds, hasTopicSignals: Object.keys(topics).length > 0 };
@@ -41,24 +41,30 @@ function overlap(a, b) {
 }
 
 function adaptiveQuestion(answers, profile) {
-  const used = new Set(answers.map(answer => answer.questionId));
-  const previous = answers.map(answer => ALL_QUESTIONS[answer.questionId]).filter(q => q?.topics);
-  if (!profile.hasTopicSignals) {
-    const neutralOrder = ['sampler', 'stories', 'animals', 'tech', 'social', 'space'];
-    return ADAPTIVE.find(q => q.id === neutralOrder.find(id => !used.has(id)));
-  }
-  return ADAPTIVE.filter(q => !used.has(q.id) && !q.neutral).map((question, position) => {
-    const affinity = question.topics.reduce((sum, tag) => sum + Math.log1p(profile.topics[tag] || 0), 0) / Math.sqrt(question.topics.length);
-    const trigger = question.triggers.some(id => profile.selectedIds.has(id)) ? 3.2 : 0;
-    const repetition = previous.reduce((sum, prior) => sum + overlap(prior.topics || [], question.topics), 0) * .65;
-    return { question, score: affinity + trigger - repetition, position };
-  }).sort((a, b) => b.score - a.score || a.position - b.position)[0]?.question;
+  const used = new Set(answers.map(a => a.questionId));
+  const yes = new Set(answers.filter(a => a.optionIds[0] === `${a.questionId}_yes`).map(a => a.questionId));
+  if (!answers.length) return ADAPTIVE[0];
+  const previous = answers.at(-1);
+  const q = ALL_QUESTIONS[previous.questionId];
+  const chain = answers.slice(-2).every(a => ALL_QUESTIONS[a.questionId].stage === 'deep');
+  const children = ADAPTIVE.filter(item => !used.has(item.id) && item.parents?.includes(q.id));
+  if (yes.has(q.id) && !chain && children.length) return children[0];
+  const screen = ADAPTIVE.find(item => item.stage === 'screen' && !used.has(item.id));
+  if (screen) return screen;
+  return ADAPTIVE.filter(item => !used.has(item.id)).map((item, index) => ({item,index,score:
+    item.topics.reduce((sum,tag)=>sum + Math.log1p(profile.topics[tag] || 0),0) / Math.sqrt(Math.max(1,item.topics.length))
+    + (item.parents?.some(id=>yes.has(id)) ? 2 : 0)
+  })).sort((a,b)=>b.score-a.score || a.index-b.index)[0]?.item;
 }
 
 export function getNextQuestion(answers = []) {
   if (answers.length >= FLOW.length) return null;
-  const phase = FLOW[answers.length];
-  return phase === 'adaptive' ? adaptiveQuestion(answers, buildProfile(answers)) : FIXED[phase];
+  const profile = buildProfile(answers);
+  if(FLOW[answers.length] === 'method') {
+    const used = new Set(answers.map(a=>a.questionId));
+    return METHOD_QUESTIONS.filter(q=>!used.has(q.id)).map((q,index)=>({q,index,score:Object.entries(q.options[0].methods).reduce((sum,[id,weight])=>sum+(profile.methods[id]||0)*weight,0)})).sort((a,b)=>b.score-a.score || a.index-b.index)[0].q;
+  }
+  return adaptiveQuestion(answers,profile);
 }
 
 export function normalizeAnswers(input) {
@@ -69,7 +75,7 @@ export function normalizeAnswers(input) {
     if (!candidate || candidate.questionId !== expected?.id || !Array.isArray(candidate.optionIds)) break;
     const valid = new Set(optionsFor(expected).map(option => option.id));
     const ids = [...new Set(candidate.optionIds)].filter(id => typeof id === 'string' && valid.has(id));
-    if (!ids.length || ids.includes('unsure') && ids.length !== 1 || !expected.multiple && ids.length !== 1) break;
+    if (ids.length !== 1 || candidate.optionIds.length !== 1) break;
     answers.push({ questionId: expected.id, optionIds: ids });
   }
   return answers;
@@ -78,7 +84,7 @@ export function normalizeAnswers(input) {
 export function validateAnswer(question, selected) {
   const ids = [...new Set(selected)];
   const valid = new Set(optionsFor(question).map(option => option.id));
-  return ids.length > 0 && ids.every(id => valid.has(id)) && (!ids.includes('unsure') || ids.length === 1) && (question.multiple || ids.length === 1);
+  return ids.length > 0 && ids.every(id => valid.has(id)) && ids.length === 1 && selected.length === 1;
 }
 
 export function topTopics(profile, topicMap, limit = 5) {

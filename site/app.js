@@ -1,7 +1,7 @@
-import { ALL_QUESTIONS, METHODS, UNSURE } from './questions.js';
+import { ALL_QUESTIONS } from './questions.js';
 import { TOTAL_QUESTIONS, MAX_COUNT, buildProfile, getNextQuestion, normalizeAnswers, optionsFor, recommend, summaryText, suggestedQuestion, topTopics, validateAnswer, validateCount } from './engine.js';
 
-const KEY = 'sonosaki-lab:v1';
+const KEY = 'sonosaki-lab:yesno-v2';
 const main = document.querySelector('#main');
 const dialog = document.querySelector('#info-dialog');
 const dialogContent = document.querySelector('#dialog-content');
@@ -20,7 +20,7 @@ function externalLink(url, label, className = '') {
   return safe ? `<a class="${className}" href="${escape(safe)}" target="_blank" rel="noopener noreferrer">${escape(label)}<span class="sr-only">（新しいタブで開きます）</span></a>` : '';
 }
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify({ version: 1, count: state.count, answers: state.answers, saved: [...state.saved].slice(0, 100) })); }
+  try { localStorage.setItem(KEY, JSON.stringify({ version: 2, count: state.count, answers: state.answers, saved: [...state.saved].slice(0, 100) })); }
   catch { state.storage = false; }
 }
 function restore() {
@@ -28,7 +28,7 @@ function restore() {
     const raw = localStorage.getItem(KEY);
     if (!raw || raw.length > 50000) return;
     const stored = JSON.parse(raw);
-    if (stored.version !== 1) return;
+    if (stored.version !== 2) return;
     try { state.count = validateCount(stored.count); } catch { state.count = 5; }
     state.answers = normalizeAnswers(stored.answers);
     if (Array.isArray(stored.saved)) state.saved = new Set(stored.saved.filter(id => typeof id === 'string' && /^[a-z0-9-]+$/.test(id)).slice(0, 100));
@@ -71,7 +71,7 @@ function renderStart() {
           <p class="field-error" id="count-error" aria-live="polite"></p>
           <button class="button button-primary start-button" data-action="start" ${loading || loadError ? 'disabled' : ''}>好きの先を、探してみる ${icon('arrow')}</button>
           ${hasHistory ? `<button class="resume-button" data-action="resume">${state.answers.length >= TOTAL_QUESTIONS ? '前回の結果をひらく' : `${state.answers.length}問目までの続きから`}</button>` : ''}
-          <p class="time-note">9つの質問 / 3分くらい / 「まだわからない」もOK</p>
+          <p class="time-note">20の質問 / 3分くらい / はい・いいえで答える</p>
         </div>
         <p class="data-line" role="status">${escape(dataLine())}</p>
         ${loadError ? '<button class="text-button reload-button" data-action="reload">もう一度読み込む</button>' : ''}
@@ -90,7 +90,7 @@ function renderStart() {
         <p class="board-caption">「好き」の理由は、ひとつじゃない。</p>
       </div>
     </section>
-    <section class="how-it-works" aria-label="探し方"><div><span class="step-dot">1</span><p>気になるものを選ぶ</p></div><span class="path-connector" aria-hidden="true"></span><div><span class="step-dot">2</span><p>好きの理由をたどる</p></div><span class="path-connector" aria-hidden="true"></span><div><span class="step-dot">3</span><p>研究室の世界をのぞく</p></div></section>
+    <section class="how-it-works" aria-label="探し方"><div><span class="step-dot">1</span><p>はい・いいえで答える</p></div><span class="path-connector" aria-hidden="true"></span><div><span class="step-dot">2</span><p>好きの理由をたどる</p></div><span class="path-connector" aria-hidden="true"></span><div><span class="step-dot">3</span><p>研究室の世界をのぞく</p></div></section>
     <section class="opening-note"><h2>大学を決める前に、<br class="mobile-only">やってみたいことに出会おう。</h2><p>東大の幅広い研究を出発点に、国内外の個性的な研究も紹介します。<br>気になったテーマを見つけたら、同じ研究をしているほかの大学にも広げてみてね。</p></section>`;
 }
 
@@ -99,19 +99,15 @@ function renderQuiz() {
   const question = getNextQuestion(state.answers);
   if (!question) return renderResults();
   const step = state.answers.length;
-  const profile = buildProfile(state.answers);
-  const interests = topTopics(profile, topicMap, 4);
+  const interests = topTopics(buildProfile(state.answers), topicMap, 4);
   document.title = `${step + 1}つ目の質問 — その先ラボ`;
-  main.innerHTML = `
-    <div class="quiz-shell">
-      <div class="quiz-progress"><button class="back-button" data-action="back">${step ? '前の質問へ' : '最初の画面へ'}</button><span>${step + 1}<small> / ${TOTAL_QUESTIONS} 問</small></span></div>
-      <progress class="progress-track" value="${step + 1}" max="${TOTAL_QUESTIONS}" aria-label="質問の進み具合"></progress>
-      <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、好きなものから。' : step === TOTAL_QUESTIONS - 1 ? 'もうすぐ、研究に出会える。' : '気になる理由を、もう少し。'}</p><h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p><span class="choice-rule">${question.multiple ? 'いくつ選んでもOK' : 'ひとつ選んでね'}</span>
-      <div class="question-options ${question.id === 'hooks' ? 'hook-options' : ''}" role="group" aria-labelledby="question-title">${question.options.map((item, i) => `<button class="option-choice" data-option="${item.id}" aria-pressed="${state.draft.includes(item.id)}"><span class="option-art">${question.id === 'hooks' ? icon(hookIcons[i]) : `<span>${String.fromCharCode(65 + i)}</span>`}</span><span class="option-text"><strong>${escape(item.label)}</strong><span>${escape(item.detail)}</span></span><span class="option-check">${icon('check')}</span></button>`).join('')}</div>
-      <button class="unsure-choice" data-option="unsure" aria-pressed="${state.draft.includes('unsure')}">${icon('spark')} ${UNSURE.label}<span>選ばずに進んでも大丈夫</span></button>
-      </section>
-      <div class="quiz-bottom"><div class="current-interests">${interests.length ? `<span>いま、気になっていること</span><div>${interests.map(t => `<span class="small-topic group-${groups.has(t.group) ? t.group : 'culture'}">${escape(t.label)}</span>`).join('')}</div>` : '<p>「好き」がまだなくても、<br>ここから見つけていけば大丈夫。</p>'}</div><div class="quiz-actions"><button class="text-button" data-action="skip">この質問はとばす</button><button class="button button-primary" data-action="next" ${validateAnswer(question, state.draft) ? '' : 'disabled'}>${step === TOTAL_QUESTIONS - 1 ? `${state.count}件の候補を見る` : '次へ進む'} ${icon('arrow')}</button></div></div>
-    </div>`;
+  main.innerHTML = `<div class="quiz-shell binary-shell">
+    <div class="quiz-progress"><button class="back-button" data-action="back">${step ? '前の質問へ' : '最初の画面へ'}</button><span>${step + 1}<small> / ${TOTAL_QUESTIONS} 問</small></span></div>
+    <progress class="progress-track" value="${step + 1}" max="${TOTAL_QUESTIONS}" aria-label="質問の進み具合"></progress>
+    <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、こんな「好き」から。' : step === TOTAL_QUESTIONS - 1 ? 'もうすぐ、研究に出会える。' : '好きの理由を、たどってみよう。'}</p><h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p>
+    <div class="binary-options" role="group" aria-labelledby="question-title">${question.options.map((item,i)=>`<button class="binary-choice ${i === 0 ? 'answer-yes' : 'answer-no'}" data-option="${item.id}" aria-pressed="${state.draft.includes(item.id)}"><span aria-hidden="true">${i === 0 ? '○' : '−'}</span><strong>${item.label}</strong><small>${i === 0 ? 'ちょっと気になる' : '今はそうでもない'}</small></button>`).join('')}</div>
+    <p class="binary-help">今の気分で選んでね。答えを押すと次の質問に進みます。<br>「いいえ」は、向いていないという意味ではありません。</p></section>
+    <div class="quiz-bottom"><div class="current-interests">${interests.length ? `<span>いま、気になっていること</span><div>${interests.map(t=>`<span class="small-topic group-${groups.has(t.group)?t.group:'culture'}">${escape(t.label)}</span>`).join('')}</div>` : '<p>まだ「はい」がなくても大丈夫。<br>いろいろな入口をのぞいていこう。</p>'}</div><span class="binary-remaining">あと${TOTAL_QUESTIONS-step}問で、${state.count}件の候補に出会えます</span></div></div>`;
 }
 
 function primaryTopic(lab, profile) {
@@ -147,7 +143,7 @@ function renderResults() {
   document.title = `${state.count}件の研究と出会う — その先ラボ`;
   main.innerHTML = `<section class="results-intro"><p class="results-complete">${icon('spark')} 好きの先で、見つけたもの。</p><h1 tabindex="-1">こんな研究の世界が<br>ありました。</h1><p>気になるものがひとつあれば、それだけでいい。<br>ここから、大学でやってみたいことを想像してみよう。</p><div class="result-interests">${interests.length ? interests.map(topic => `<span class="small-topic group-${groups.has(topic.group) ? topic.group : 'culture'}">${escape(topic.label)}</span>`).join('') : '<span class="small-topic group-culture">いろいろな分野をのぞく、自由探索</span>'}</div>
     <div class="results-tools"><div><strong id="result-count-label">${results.length}件の候補</strong><label for="result-count">件数を変える</label><select id="result-count" data-result-count>${Array.from({ length: MAX_COUNT }, (_, i) => `<option value="${i + 1}" ${state.count === i + 1 ? 'selected' : ''}>${i + 1}件</option>`).join('')}</select></div><button class="button button-secondary" data-action="memo">先生に見せるメモを保存</button></div>
-    <details class="answers-details"><summary>選んだ答えを見直す</summary><ol>${state.answers.map((answer, i) => { const q = ALL_QUESTIONS[answer.questionId]; return `<li><span>${escape(q.title)}</span><strong>${answer.optionIds.map(id => id === 'unsure' ? UNSURE.label : q.options.find(o => o.id === id)?.label || '').map(escape).join('、')}</strong><button data-edit-step="${i}">${i + 1}問目から見直す</button></li>`; }).join('')}</ol></details>
+    <details class="answers-details"><summary>選んだ答えを見直す</summary><ol>${state.answers.map((answer, i) => { const q = ALL_QUESTIONS[answer.questionId]; return `<li><span>${escape(q.title)}</span><strong>${answer.optionIds.map(id => q.options.find(o => o.id === id)?.label || '').map(escape).join('、')}</strong><button data-edit-step="${i}">${i + 1}問目から見直す</button></li>`; }).join('')}</ol></details>
     </section><section class="results-list" aria-labelledby="result-count-label">${results.map((lab, index) => labCard(lab, index, profile)).join('')}</section>
     <section class="next-step"><div class="next-step-star">${icon('spark')}</div><div><h2>「ここ、ちょっと気になる。」<br>その理由を、ひとこと残そう。</h2><p>同じテーマの大学を探す。公開講座を聞いてみる。<br>先生や家族に、このメモを見せてみる。小さな次の一歩でOK。</p><div><button class="button button-primary" data-action="memo">結果をメモにする</button><button class="text-button" data-action="restart">別の「好き」でもう一度</button></div></div></section>
     <p class="results-footnote">ここにあるのは、大学の研究を知るための見本です。研究室のほか、教室・教員の研究テーマや研究センターを含みます。学部の授業や配属、入試は各大学の公式案内も確かめてみてね。</p>`;
@@ -162,15 +158,12 @@ function render() {
 function chooseOption(id) {
   const question = getNextQuestion(state.answers);
   if (!question || !optionsFor(question).some(option => option.id === id)) return;
-  if (id === 'unsure' || !question.multiple) state.draft = [id];
-  else state.draft = state.draft.includes(id) ? state.draft.filter(item => item !== id) : [...state.draft.filter(item => item !== 'unsure'), id];
-  main.querySelectorAll('[data-option]').forEach(button => button.setAttribute('aria-pressed', state.draft.includes(button.dataset.option)));
-  const next = main.querySelector('[data-action="next"]');
-  if (next) next.disabled = !validateAnswer(question, state.draft);
+  state.draft = [id];
+  advance();
 }
-function advance(skip = false) {
+function advance() {
   const question = getNextQuestion(state.answers);
-  const ids = skip ? ['unsure'] : state.draft;
+  const ids = state.draft;
   if (!question || !validateAnswer(question, ids)) return;
   state.answers.push({ questionId: question.id, optionIds: [...ids] });
   state.draft = [];
@@ -202,7 +195,7 @@ function showDialog(content) {
   if (!dialog.open) dialog.showModal();
 }
 function showAbout() {
-  showDialog(`<span class="dialog-symbol">${icon('spark')}</span><h2 id="dialog-title">好きの先を、のぞくために。</h2><p>その先ラボは、志望校がまだ決まっていない高校生が、大学でどんなことを研究できるか知るためのツールです。</p><h3>質問から、何を探しているの？</h3><p>好きなもの、その理由、やってみたい調べ方と近い研究テーマを紹介します。「まだわからない」も選べます。向き不向きや合格の可能性を決めるテストではありません。</p><h3>紹介しているデータ</h3><p>東京大学の公式一覧をもとに作った2,988行のCSVを使い、重複などを整理しています。研究内容を説明できる東大のテーマと、国内外の${catalogue?.stats.additionalUniversities || 4}大学の研究を合わせた${catalogue?.stats.eligible.toLocaleString('ja-JP') || '—'}件を候補にしています。</p><p>教員の研究テーマや研究センターは、その種類を表示しています。表示する数は1〜20件で選べ、選んだ数だけ紹介します。</p><h3>説明と成果について</h3><p>研究分野を分かりやすく言い換えた説明を含みます。「たとえば、こんな問い」は研究に興味を持つための例で、その研究室が今まさに取り組んでいる課題とは限りません。</p><p>成果は出典を確認できたものだけを紹介しています。未確認は、成果がないという意味ではありません。同じ教員の別の所属で紹介された成果を含む場合もあります。</p><p>情報の確認日：${escape(catalogue?.checkedAt || '2026-10-28')}。所属・研究内容・募集状況は変わることがあります。</p><h3>大学選びにつなげるには</h3><p>東大は、幅広い研究を知るための出発点です。同じテーマを研究するほかの大学や、学部の授業、入試の公式案内にも広げてみてください。</p><h3>回答の保存</h3><p>回答と「気になる」は、保存が使える場合、このブラウザー内にだけ残ります。アカウント登録や、回答の外部送信はありません。</p>`);
+  showDialog(`<span class="dialog-symbol">${icon('spark')}</span><h2 id="dialog-title">好きの先を、のぞくために。</h2><p>その先ラボは、志望校がまだ決まっていない高校生が、大学でどんなことを研究できるか知るためのツールです。</p><h3>質問から、何を探しているの？</h3><p>好きなもの、その理由、やってみたい調べ方と近い研究テーマを紹介します。20問すべて「はい／いいえ」で答えます。「いいえ」は今の関心として扱い、能力の否定や分野の完全除外には使いません。向き不向きや合格の可能性を決めるテストではありません。</p><h3>紹介しているデータ</h3><p>東京大学の公式一覧をもとに作った2,988行のCSVを使い、重複などを整理しています。研究内容を説明できる東大のテーマと、国内外の${catalogue?.stats.additionalUniversities || 4}大学の研究を合わせた${catalogue?.stats.eligible.toLocaleString('ja-JP') || '—'}件を候補にしています。</p><p>教員の研究テーマや研究センターは、その種類を表示しています。表示する数は1〜20件で選べ、選んだ数だけ紹介します。</p><h3>説明と成果について</h3><p>研究分野を分かりやすく言い換えた説明を含みます。「たとえば、こんな問い」は研究に興味を持つための例で、その研究室が今まさに取り組んでいる課題とは限りません。</p><p>成果は出典を確認できたものだけを紹介しています。未確認は、成果がないという意味ではありません。同じ教員の別の所属で紹介された成果を含む場合もあります。</p><p>情報の確認日：${escape(catalogue?.checkedAt || '2026-10-28')}。所属・研究内容・募集状況は変わることがあります。</p><h3>大学選びにつなげるには</h3><p>東大は、幅広い研究を知るための出発点です。同じテーマを研究するほかの大学や、学部の授業、入試の公式案内にも広げてみてください。</p><h3>回答の保存</h3><p>回答と「気になる」は、保存が使える場合、このブラウザー内にだけ残ります。アカウント登録や、回答の外部送信はありません。</p>`);
 }
 function showSaved() {
   const labs = catalogue?.labs.filter(lab => state.saved.has(lab.id)) || [];
@@ -233,8 +226,6 @@ document.addEventListener('click', event => {
     case 'resume': if (!catalogue) break; state.draft = []; state.phase = state.answers.length >= TOTAL_QUESTIONS ? 'results' : 'quiz'; render(); focusHeading(); break;
     case 'restart': state.answers = []; state.draft = []; state.phase = 'start'; save(); render(); focusHeading(); break;
     case 'back': if (!state.answers.length) { state.phase = 'start'; render(); focusHeading(); } else editStep(state.answers.length - 1); break;
-    case 'next': advance(); break;
-    case 'skip': advance(true); break;
     case 'about': showAbout(); break;
     case 'saved': showSaved(); break;
     case 'close-dialog': dialog.close(); break;
