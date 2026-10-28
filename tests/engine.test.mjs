@@ -65,8 +65,9 @@ test('All reviewed records have a legal positive path, without counting broad or
 test('An everyday yes immediately opens a related individual question; no explores another doorway',()=>{
  configureCatalog(catalog.labs);
  const first=getNextQuestion([],5,123);assert.equal(first.stage,'broad');
- const follow=getNextQuestion([yes(first,true)],5,123);
- assert.equal(follow.stage,'evidence');assert.equal(follow.group,first.group);assert.equal(follow.facet,'interest');
+ const bridge=getNextQuestion([yes(first,true)],5,123);assert.equal(bridge.stage,'bridge');
+ const follow=getNextQuestion([yes(first,true),yes(bridge,true)],5,123);
+ assert.equal(follow.stage,'evidence');assert.equal(follow.group,first.group);assert.equal(follow.facet,'interest');assert(follow.topics.some(t=>bridge.topics.includes(t)));
  assert.equal(getNextQuestion([yes(first,false)],5,123).stage,'broad');
  assert(!QUESTION_BANK.some(q=>q.stage.startsWith('understanding')));
 });

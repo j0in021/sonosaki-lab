@@ -1,5 +1,5 @@
 // Generated from individually reviewed evidence.
-export const BANK_REVISION = "a22c0041e9f2f5265d6405a3f1022e00636d53f93648c4efb48a161315e6b6a7";
+export const BANK_REVISION = "a9d46936e20049f36a60b0339fa866bf945375cbb445ed40c90a2f7642d6224b";
 export const QUESTION_BANK = [
   {
     "id": "broad_culture",
@@ -275,6 +275,29 @@ export const QUESTION_BANK = [
       },
       {
         "id": "broad_technology_no",
+        "label": "いいえ"
+      }
+    ]
+  },
+  {
+    "id": "bridge_culture",
+    "title": "昔の信仰や言い伝えが、どう生まれたのか気になる？",
+    "stage": "bridge",
+    "facet": null,
+    "topics": [
+      "religion",
+      "folklore"
+    ],
+    "note": "作品の好みと、研究してみたいことは別でも大丈夫。この答えだけで推薦は決まりません。",
+    "multiple": false,
+    "group": "culture",
+    "options": [
+      {
+        "id": "bridge_culture_yes",
+        "label": "はい"
+      },
+      {
+        "id": "bridge_culture_no",
         "label": "いいえ"
       }
     ]

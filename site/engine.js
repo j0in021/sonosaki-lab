@@ -66,6 +66,7 @@ export function assessmentState(answers=[],count=5,seed=0,continueAfterStop=fals
   qualifiedCount,requestedCount:count,ready:qualifiedCount>=count,completedExamples:completed,totalExamples:states.length,exhausted:false,automaticStop:false,stopReason:null};
  const next=q=>({...common,next:q});
  const stop=reason=>({...common,next:null,automaticStop:true,exhausted:reason==='examples-exhausted',stopReason:reason});
+ if(positive(answered.get('broad_culture'))&&!answered.has('bridge_culture'))return next(ALL_QUESTIONS.bridge_culture);
  const active=states.find(s=>s.started&&!s.complete);
  if(active)return next(active.next);
  if(completed===states.length)return stop('examples-exhausted');
@@ -77,11 +78,12 @@ export function assessmentState(answers=[],count=5,seed=0,continueAfterStop=fals
  }
  const last=answers.at(-1),lastQuestion=ALL_QUESTIONS[last?.questionId];
  // A yes opens a related study immediately; a completed study opens another everyday interest.
- if(remainingBroad.length&&(!last||lastQuestion?.stage!=='broad'||!positive(last)))return next(remainingBroad[0]);
+ if(remainingBroad.length&&(!last||!['broad','bridge'].includes(lastQuestion?.stage)||!positive(last)))return next(remainingBroad[0]);
  const positiveGroups=new Set(broad.filter(q=>positive(answered.get(q.id))).map(q=>q.group));
  const candidates=shuffled(states.filter(s=>!s.started),seed^completed);
  // Broad interests order examples, never fabricate reasons or exclude another field.
- candidates.sort((a,b)=>Number(positiveGroups.has(b.lab.lesson.group))-Number(positiveGroups.has(a.lab.lesson.group)));
+ const affinity=lab=>Number(positiveGroups.has(lab.lesson.group))+(lastQuestion?.stage==='bridge'&&positive(last)?lastQuestion.topics.filter(t=>lab.topics[t]).length*2:0);
+ candidates.sort((a,b)=>affinity(b.lab)-affinity(a.lab));
  return next(candidates[0].next);
 }
 export const getNextQuestion=(answers=[],count=5,seed=0,continueAfterStop=false)=>assessmentState(answers,count,seed,continueAfterStop).next;

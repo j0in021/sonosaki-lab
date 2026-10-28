@@ -22,6 +22,7 @@ def add(id,title,stage,**kwargs):
     bank.append(dict(id=id,title=title,stage=stage,facet=None,topics=[],note='',multiple=False,**{})|kwargs|{'options':[{'id':id+'_yes','label':'はい'},{'id':id+'_no','label':'いいえ'}]})
 for group,title in groups.items():
     add('broad_'+group,title,'broad',group=group,topics=[t['id'] for t in topics if t['group']==group],note='まだ知らない分野でも大丈夫。あとから研究例を見られます。この答えだけで候補を除外しません。')
+add('bridge_culture','昔の信仰や言い伝えが、どう生まれたのか気になる？','bridge',group='culture',topics=['religion','folklore'],note='作品の好みと、研究してみたいことは別でも大丈夫。この答えだけで推薦は決まりません。')
 for id,e in sorted(reviewed_entries().items()):
     common=dict(labId=id,group=e['group'],topics=e['topics'],lessonTitle=e['title'],sourceURL=e['sourceURL'])
     for r in e['evidence']:
