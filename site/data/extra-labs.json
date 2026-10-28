@@ -1,0 +1,165 @@
+[
+  {
+    "id": "ritsumeikan-games",
+    "university": "立命館大学",
+    "country": "日本",
+    "name": "ゲーム研究センター",
+    "kind": "研究センター",
+    "faculty": [
+      "映像・人文社会・情報など"
+    ],
+    "departments": [
+      "ゲーム研究"
+    ],
+    "researchers": "",
+    "description": "ゲームを、作り方だけでなく、文化や歴史、人と人のつながりとして調べています。昔のゲームを集めて残し、作り手の話を記録する研究も行います。",
+    "achievement": "所蔵するゲームを探せる「RCGSコレクション」を公開し、ゲーム制作に関わった人の話を記録するプロジェクトを進めています。",
+    "achievementType": "research",
+    "url": "https://www.rcgs.jp/",
+    "sources": {
+      "directory": [
+        "https://www.rcgs.jp/"
+      ],
+      "description": "https://www.rcgs.jp/",
+      "achievement": "https://www.rcgs.jp/"
+    },
+    "topics": {
+      "games": 3,
+      "history": 2,
+      "media": 2,
+      "folklore": 1,
+      "design": 1
+    },
+    "methods": [
+      "read",
+      "people",
+      "create"
+    ],
+    "checkedAt": "2026-10-28",
+    "sourceRowIds": [],
+    "eligible": true
+  },
+  {
+    "id": "asu-imagination",
+    "university": "アリゾナ州立大学",
+    "country": "アメリカ",
+    "name": "科学と想像力センター",
+    "kind": "研究センター",
+    "faculty": [
+      "人文・芸術・科学技術を横断"
+    ],
+    "departments": [
+      "Science and the Imagination"
+    ],
+    "researchers": "",
+    "description": "SF作家やアーティストと科学者が一緒に、まだない未来を想像します。物語を使って、新しい技術が人の暮らしや社会をどう変えるかを考えています。",
+    "achievement": "作家と科学者の対話から、よりよい未来を描くSF作品集『Hieroglyph』を作りました。物語を、未来を考えるための材料として公開しています。",
+    "achievementType": "publication",
+    "url": "https://csi.asu.edu/",
+    "sources": {
+      "directory": [
+        "https://csi.asu.edu/"
+      ],
+      "description": "https://csi.asu.edu/",
+      "achievement": "https://lib.asu.edu/shelf-life/hieroglyph"
+    },
+    "topics": {
+      "literature": 3,
+      "art": 2,
+      "philosophy": 2,
+      "design": 2,
+      "media": 1,
+      "society": 2,
+      "ai": 1
+    },
+    "methods": [
+      "read",
+      "create",
+      "people"
+    ],
+    "checkedAt": "2026-10-28",
+    "sourceRowIds": [],
+    "eligible": true
+  },
+  {
+    "id": "harvard-microrobotics",
+    "university": "ハーバード大学",
+    "country": "アメリカ",
+    "name": "マイクロロボティクス研究室",
+    "kind": "研究室",
+    "faculty": [
+      "工学・応用科学"
+    ],
+    "departments": [
+      "Microrobotics"
+    ],
+    "researchers": "",
+    "description": "ハチなどの昆虫や折り紙を手がかりに、とても小さく、軽く、しなやかに動くロボットを作っています。生き物の動きと、材料や機械の作り方を組み合わせる研究です。",
+    "achievement": "昆虫ほどの大きさの飛行ロボット「RoboBee」を開発しました。ガガンボの脚を参考に、着地を助ける長い脚を取り付けた研究も発表しています。",
+    "achievementType": "research",
+    "url": "https://www.micro.seas.harvard.edu/research",
+    "sources": {
+      "directory": [
+        "https://www.micro.seas.harvard.edu/research"
+      ],
+      "description": "https://www.micro.seas.harvard.edu/research",
+      "achievement": "https://seas.harvard.edu/news/robobee-comes-landing"
+    },
+    "topics": {
+      "robots": 3,
+      "animals": 2,
+      "materials": 2,
+      "design": 2,
+      "physics": 1
+    },
+    "methods": [
+      "create",
+      "experiment",
+      "code"
+    ],
+    "checkedAt": "2026-10-28",
+    "sourceRowIds": [],
+    "eligible": true
+  },
+  {
+    "id": "stanford-vhil",
+    "university": "スタンフォード大学",
+    "country": "アメリカ",
+    "name": "Virtual Human Interaction Lab",
+    "kind": "研究室",
+    "faculty": [
+      "コミュニケーション"
+    ],
+    "departments": [
+      "VRと人の心・行動"
+    ],
+    "researchers": "",
+    "description": "VRで別の場所や立場を体験すると、人の感じ方や行動がどう変わるかを調べています。環境問題の学びや、他の人の立場を理解することなどがテーマです。",
+    "achievement": null,
+    "achievementType": null,
+    "url": "https://vhil.stanford.edu/about/projects",
+    "sources": {
+      "directory": [
+        "https://vhil.stanford.edu/about-us"
+      ],
+      "description": "https://vhil.stanford.edu/about/projects",
+      "achievement": null
+    },
+    "topics": {
+      "vr": 3,
+      "mind": 3,
+      "learning": 2,
+      "environment": 1,
+      "society": 1,
+      "design": 1
+    },
+    "methods": [
+      "experiment",
+      "people",
+      "create"
+    ],
+    "checkedAt": "2026-10-28",
+    "sourceRowIds": [],
+    "eligible": true
+  }
+]

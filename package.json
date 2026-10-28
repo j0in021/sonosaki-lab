@@ -1,0 +1,13 @@
+{
+  "name": "sonosaki-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "好きなことから、大学で研究したいことに出会う高校生向け探索ツール",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check-site.mjs",
+    "dev": "python3 -m http.server 4173 --directory site --bind 127.0.0.1"
+  },
+  "engines": { "node": ">=22" }
+}
