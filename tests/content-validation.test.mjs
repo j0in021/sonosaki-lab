@@ -22,11 +22,27 @@ x=copy.deepcopy(entry);x['evidence'][0]['question']='調べたい';cases.append(
 x=copy.deepcopy(entry);x['evidence'][1]['question']=x['evidence'][0]['question'];cases.append(x)
 x=copy.deepcopy(entry);x['evidence'][1]['facet']=x['evidence'][0]['facet'];cases.append(x)
 x=copy.deepcopy(entry);del x['evidence'][0]['sourceLocator'];cases.append(x)
+x=copy.deepcopy(entry);x['intro']+='未承認の変更';cases.append(x)
+x=copy.deepcopy(entry);x['labId']='unreviewed-new-record';cases.append(x)
 for i,x in enumerate(cases):
     try:check(x)
     except AssertionError:continue
     raise AssertionError('Accepted corruption '+str(i))
-print('Rejected six known corruption patterns')
+print('Rejected eight known corruption patterns')
 `],{cwd:new URL('../',import.meta.url),encoding:'utf8'});
  assert.equal(result.status,0,result.stderr||result.stdout);
+});
+
+ test('runtime refuses evidence or explanation detached from approved questions',async()=>{
+ const fs=await import('node:fs');
+ const {hasVerifiedEvidence}=await import('../site/engine.js');
+ const catalog=JSON.parse(fs.readFileSync(new URL('../site/data/catalog.json',import.meta.url)));
+ const original=catalog.labs.find(l=>l.eligible);
+ assert(hasVerifiedEvidence(original));
+ for(const field of ['claim','sourceURL','sourceLocator','checkedAt','semanticKey']){
+  const lab=structuredClone(original);lab.evidence[0][field]+=' changed';
+  assert.equal(hasVerifiedEvidence(lab),false,field);
+ }
+ const lab=structuredClone(original);lab.lesson.intro+=' changed';
+ assert.equal(hasVerifiedEvidence(lab),false);
 });

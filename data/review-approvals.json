@@ -1,0 +1,972 @@
+{
+  "schemaVersion": 1,
+  "origin": "既存の個別確認済み161件を固定。新しい独立レビューを実施したという記録ではない。",
+  "entries": {
+    "utokyo-a6157ef84202": {
+      "sha256": "4df4907a21f1a5c0659b94b25ba8d0f6cdf005378f8c005d8c676c747ba378e1",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3e0d96953758": {
+      "sha256": "4978b64848587bac50007cbea468d45689ec92f908d8a3ac9e13765e04f2d46f",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c38bfde32a4e": {
+      "sha256": "29ea98250ab5092b8adcff3970bd19728dd05c41991a239869179fd15880a08c",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "harvard-microrobotics": {
+      "sha256": "25b844eee7ed2023fb5aadc2b1c13e4e2498967cd8057cd46eb353725c3596d5",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "asu-imagination": {
+      "sha256": "4d34b4fefe77841eedc53bb5602163b64cd3bb632e304e743f5b413624f24078",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "stanford-vhil": {
+      "sha256": "715017b73eed56fa1fdacb9fb4b9d4d954e1cbd575aba10e03f39dccf182b905",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-984611d473fd": {
+      "sha256": "05bb16773d4ea868bd7f089ac535a1b0a54439cf7783ce54406dc97ae6f091e1",
+      "reviewer": "Codex: official individual research description read and mapped",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "ritsumeikan-games": {
+      "sha256": "11808249198ce8b3bdec8d790dc023dcb5985415e5585eebb7a3d5a45161f943",
+      "reviewer": "Codex: official individual research description read and mapped",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-dc92ddd9d426": {
+      "sha256": "f91750e93d1ef524862e52f87bbce6761803b04c36fbd83050790c5a74f6a80d",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3b4ec43659c2": {
+      "sha256": "463698484f2380477a306349ff248a37e29c1ca4bea03bcc40da1312d3505232",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fe9aee749b8e": {
+      "sha256": "8f8e1ecde7b5bece8fb66836bb8cdb048fe58bf4c843fdec63640e2c88a1eb51",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-298d85fabe6b": {
+      "sha256": "ae8aaa2caa97fa4b60cc4de8aa911b786e786a89139e8539a2e3644e55bc78cf",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-9231cc070858": {
+      "sha256": "ee5b6eab5540fef753b804fd27d2d35e9e66254d99a5f1d77fa8fdf05c2af5b9",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-42afa8f80816": {
+      "sha256": "23aa840e0caff4569e7c21fcf8d22f35158369ff72a795b781dcde6e43a8c896",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ce93426c9162": {
+      "sha256": "eee93be6c9819e7b3aa28318220a8588dd7d420299a1e704be46e144d6ebef61",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8ef84f27c212": {
+      "sha256": "a868ab366337cb09116d73a3472791b09eda35399bd7166785a5fadc983fac9c",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b62a318993f9": {
+      "sha256": "ac92a86019e07105c99bdbcc15396c97d7128498f67ac520fb0517afc9b086fa",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c0b44ede95a2": {
+      "sha256": "d78969e090f1524d27ec28fee6f5d957345491170477f1ebd507095f25c4b9f6",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3e3f059c7733": {
+      "sha256": "17618bd46a0d58c561e6282596a4e0852a23d888f649e5ab4252cc4c70fed3a9",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6163ecc6edae": {
+      "sha256": "932345383a3ca8bb49ea50c14c7d5878c2f2393b7c3c7915ff5a94ba925ecc95",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fac37c126101": {
+      "sha256": "81ca6e101e67a2c7ffd5dbce1c4496cf43a89a9f92852f441e8a7d50a70db898",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-506777a0913e": {
+      "sha256": "331baff1db58699168c253afa893366f85037d48ae1a772dbd5de9cf76c9f2a9",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6056ef14366e": {
+      "sha256": "8d2c900245ceedfc052f9e3bc2f28754eef6526f613713fefcbe97079a33b9e5",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f3419dea5a1d": {
+      "sha256": "bf9c35f481fbc73705c9b5fa42d50fc4af67c42d2d7cf5c4724ee03fcf2328f0",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-da9e2af5b029": {
+      "sha256": "e9657e7a33753f35ed97e4d9888f4de5f39bd58714f7b9f17c5185733a221f96",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-313d1806ab55": {
+      "sha256": "9c68896829b543ebfca1d1d71925797139e19801b32211ea6f2e23ebc937989d",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-345b166a2c01": {
+      "sha256": "80592ae2b59fabf5c28bda6f0bfa1f0fff1826d65c753da6872fcfd8d3dcd3df",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b803f8614705": {
+      "sha256": "5dc0c4fa696846fbee7931b6adc13e4b674d7dc8008e4632a71b4fba42707e8e",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-cb8269e83c1c": {
+      "sha256": "743c08323973c6ff76f44bd77a5284bbff67c8aff31144d431aa2cad85aa55eb",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-4388aa2d27bc": {
+      "sha256": "220b332fbd6bb49bd89e875198a5ec8443c0f5504c51fc2bde36adf38405b817",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e234475787c5": {
+      "sha256": "31173216e7cbcf1e4d0499e2c1e597e769141cdcfcf20c4b67d7994a48c9bc42",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-1669f361e58b": {
+      "sha256": "c97bf57e40052b0cd0f6edf50654d01767031b0abd992825c7452c82b6a17bda",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-43cab1911f24": {
+      "sha256": "b68be67bfcd3fda9fc3c37bdaba90fddab3e13a3d7176f19d708feb4e7ca586f",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ca6847f542fd": {
+      "sha256": "4265ce2905a9dc0372ca25637b3dfcc9a9bea0254ba3588ffbc5219bea729e69",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-88e1a916dc6d": {
+      "sha256": "8615ca9449bdec1ff5be6adcf1524d393161be82d7999f8836ea3b18251f62e2",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-9855a8e757b1": {
+      "sha256": "2f30d99db06697cf734adf6352349ac5b82ccd69a325d126a8236ebd4d5f3418",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-84118b0f818f": {
+      "sha256": "34e9d4f96240afaacb4b012bd49a3cf01ee3649704266f46b3b4a2762d92abb0",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fa16d1007ecd": {
+      "sha256": "d7c7d08babe11f8e82ac5d3bf3a469c5b5624a04b25592f3de63955016e881b8",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6f49455e94fe": {
+      "sha256": "c1abd559292d186136b8419d64e08f5de8e7369f8de58bf927087d5d47047d65",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d2b8e35db4b4": {
+      "sha256": "32b9cc9ba11d1a48d5c66a67b6c560e45667e126cfeb50325adc62d93a6aee28",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f3409b15b49d": {
+      "sha256": "664ea9f6ca11926be2294a6b9c2011f09eb35bc2140f7dbd5dfe9cbeafa1bde0",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3348df5df868": {
+      "sha256": "68f47bb8b2d1c4b60642dcaafd6a6bd764d95d15cd84f967f953702d83fae945",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6c9b3123507a": {
+      "sha256": "6d2266f690362305840abacd4c2571e0883289c7ee580639b5f736798ee961ee",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a92f1251195a": {
+      "sha256": "f2ee6f9170b5826e234171bcfcfb4ca79c127cb965b693a3659c0c303368a2b2",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-06f1de44af20": {
+      "sha256": "ee6be1191e12518483b4d50f031656a05ecff1666a9eaa9905565ba80c9bbd2c",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d7d6fec0e0b4": {
+      "sha256": "4bf9fff50ee5ffb8eea6f2464c4a9d93e9b8dcf0c4871ad8fdff7ef483082d12",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-4539cf33b347": {
+      "sha256": "f34906cf8329d3f395ebf7ab397b5b015cefc001c30009ab1f049349975892a9",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-69fb18b8b62d": {
+      "sha256": "c8a2c90047835e4631b9bccd4c4c998fb2c8c4e7dd8ee737c22afa380f25f282",
+      "reviewer": "Codex: official source read and semantic mapping reviewed",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d60aae27fce4": {
+      "sha256": "2afaba853dfa129832092737d8c0f53fc81fd747f05ca65854f6216bffd2e37c",
+      "reviewer": "Codex batch-011: official source individually read; parent source and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-eaf69fffc443": {
+      "sha256": "0b9733851351ae3aeaa2421d5cdc15164521cd6580a7111c68422e338bf5ae2a",
+      "reviewer": "Codex batch-011: official source individually read; parent source and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-94a6c15b3c41": {
+      "sha256": "0107654d1302c152ed491380adf6486a6ec35aa477d21e9404624d33003dc5ad",
+      "reviewer": "Codex batch-011: official source individually read; parent official text and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a96b94ba6a59": {
+      "sha256": "7fc83857c190c21caaf309c2c369e8d3defc8352420327672c6fb57fa648e68e",
+      "reviewer": "Codex batch-011: official source individually read; parent official text and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f98967dcca2a": {
+      "sha256": "90f5b15fb65430b6d6c9bdae51f6e2bccc5c39a83ace0c9efee8611dba0a129f",
+      "reviewer": "Codex batch-011: official source individually read; parent official source and semantics rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b1c17c569969": {
+      "sha256": "9996295f0929dc3ead7ff851a2042087f9016f8311e123ceaf69e8591884f6b5",
+      "reviewer": "Codex batch-011: official source individually read; parent official source and semantics rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-182f5aebcde2": {
+      "sha256": "bf35f6a5159428c9734a4ea899b7eed0a95b5ae8018c498ad87ecd2082487844",
+      "reviewer": "Codex batch-011: official source individually read; parent official text and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-0194ea49ce80": {
+      "sha256": "7d86238476d544c99007584206aec9911b2725329456aa4867c10546c8b48714",
+      "reviewer": "Codex batch-011: official source individually read; parent official text and semantic correspondence rechecked",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-87bd526d1cd5": {
+      "sha256": "8f2b8b5f9f8dc225fb843abaae6352e57f21baecab5a922f2697528276fba2e5",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e50ce471c1e5": {
+      "sha256": "c7e851a53aad197a0e671361b7f4956dde81059f00955b6433f4c8249f663815",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-5746165db346": {
+      "sha256": "3bee1e5340ef0d87826c0a82c872ba4f3d7cff8c93d63489bb02c41d2159a8ce",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ea9e829bbfa0": {
+      "sha256": "2f01501165c0d4a70077eba91ef1e388d62dc0392311f4d6682bcfa599baa33d",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-7dafe3130135": {
+      "sha256": "681a58e8569a92e7e70fb183752ec0fe2c2e724e7e12765f3a3ffe0e223998f4",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d8c87c86e509": {
+      "sha256": "99a5f10ddf12e51c16e670d0a73c9da69f294340191ffab0b1209457c8d6da58",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8774c7a19a99": {
+      "sha256": "68e3d1858f1c44255533f2d5274c0db61ddd14a8ab3bb543af43e1308ba4a9d1",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-12b2607529dc": {
+      "sha256": "5558b3ffdd1668bd6037b2b8865a7e7a308982b6b062986793f980a6391fcdc5",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-19a97122b935": {
+      "sha256": "e60a212ec37067fae9bd4d48bdfb7e0c8618dfb158fb0d7b9b4ce2ae20994b27",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3e0c5d7eea69": {
+      "sha256": "3d95582b7e58cb0301ed92665ee63ced9c44e176f9257d919606cde82d5b946c",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d395049a8300": {
+      "sha256": "798070d6fe792224bfe914510c85840747f05572611e714c14d43ddeb029ec20",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-7180969a541e": {
+      "sha256": "df22d2de6b895d8817659a0dd0a5c38385bb01d0cf9ffc4be5120114158e1da5",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-49496d9d8419": {
+      "sha256": "e566c81edea5f7b313857b041b20f04e1709acf30d07373018b762becd0da1fe",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fece9bd2fa47": {
+      "sha256": "3e188c5a7c80a12a26ebd95dbae15cc75a4b1510254cf086b63515c7ca4acf0d",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-0e511f71787e": {
+      "sha256": "fc5cd07f5f0b83ee6690e41034a1fd48f7b5ecb1454f9c02f67da79d198b8699",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-566b962508a3": {
+      "sha256": "bf1ac02d4cc8c94a28d985ca53821fc94e65e5facca5b44ab7ef09f582819307",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-7ccab6a437b2": {
+      "sha256": "4778467dda93117e58ea58188302b4bc3023a05acbfbbddf299fe9f1ff17e269",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6dd18ce51358": {
+      "sha256": "4c801241e1be2c327c95a7fb6eb6ba9de384ac207e142a44693b9df6afe84462",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-60801dee9581": {
+      "sha256": "98ab304d6a99c8a327f1a5f11b958aa80153a52b9eb0639c6c9c398dd368b2ff",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d3f63ec9240d": {
+      "sha256": "2d03ca98de91e8175513ea5dbc5b30a923c556f503767ad26b36f297e8779e15",
+      "reviewer": "Codex: independent cross-review of batch-022; official full text and input identity rechecked; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-59d32ae3eac0": {
+      "sha256": "4022a3064e48a00d4640de42e5b1837e3f4cdd4681ed3e522aa0baf8de5e5ae8",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-0242daf28a09": {
+      "sha256": "85805fa81441752f360b611357f18bd0fce1f182660f8652dce9595de915600a",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3d141987cb06": {
+      "sha256": "084a7f1e6f70e0538e4b2450478a54950784469e9d3ec0f52b3cddaba1763a9e",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d8c516cdc4e1": {
+      "sha256": "a441f2dd4baa00faa5d6b655922951b495dd2ee2801b651f2a4270e571579827",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fe3d2b77c623": {
+      "sha256": "915db7752c9bcbdba1ebaef1354b70210d45a72d552226e22bda06f3f2637c82",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-193932933ae6": {
+      "sha256": "9d8cb6f6a648517f97b9194b6144885b68cd91464d7bf721940b52570268fcc5",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a67bece6cd83": {
+      "sha256": "f75636be13b05ca45884a80c7f06e864116ac77fb94967d026f3ca2cbb8a0c84",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-84f16b363ab0": {
+      "sha256": "12961927c9cc5d8577ecc368384e78a80482e5f489b246984610034077663441",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8b1570266e51": {
+      "sha256": "ec239dcce592508e839bebb564739b22bf2f9329e70a26ec5405d2cee03683bd",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-9aef8e52b2b3": {
+      "sha256": "3c7fd113e212229b4b44f1bdfcd474d5806cafb1b2d3625e0b91f7d769a609f5",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c430716ac76d": {
+      "sha256": "c1ac8723f39ac93cd4e7a21435042fc9a039936e1b0bcb9a028199561ae3e25f",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ec70fb6fe604": {
+      "sha256": "83dcc15126985c864422e9fcfe51919a883af1def4ec61be9f86f29c92556c0a",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3693d7a609a3": {
+      "sha256": "83b85d4f3e2d8fc6b3d675fd42ef3086db454ffa3c7fd496d398dc7034c321e5",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-86b1809ce8f4": {
+      "sha256": "8e9defc9d876dae520edb9f0a877ca15e353c4362e069182b586edb2977ffc3a",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a698ba51e5bd": {
+      "sha256": "4b4c67127d3c96b8304b0586257a616461c25eb36b269d599a9025e674cdade9",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-815c58acef69": {
+      "sha256": "353b942fb40098c8ba54d50b12bcce56cb83bde5d080e21e2219305120b9a8fa",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-1f17c8eafa71": {
+      "sha256": "d8b6d7bc59eb250aba4fb2c35af9d388898acf5866c08f8661be425024b29368",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8efd6cd7108b": {
+      "sha256": "9e3016c470998badffa9a577cb8dd0f1ea083642f8ba34f724846fe94d7ada48",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c3d2e03d3d13": {
+      "sha256": "d89b2f4f61b66704d5cc6c8f5e7c66f0b5fa73b74412f1456dda2cc68281820c",
+      "reviewer": "Codex: independent cross-review of official body; identity, distinct facets and plain Japanese revised; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-93f0bebeee76": {
+      "sha256": "bb9170f86fd2ba95079d5feb17ecc0841b28c92a711c1471d5742e9d5fff7227",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fe63c7e33d53": {
+      "sha256": "270872dfa7901c12e5172a139b0c8218c70b472b8129e5dbc8354c3a7d017e11",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-1133fef53f67": {
+      "sha256": "2aa57cd8dbd6d24ee1719680d82406d2a60e484953bf234a4b64fd88d17fb6a6",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-cfae0eaf1c31": {
+      "sha256": "9562cf32349acdaca152d1f10e5f752de415a877e537041b296fb38729060451",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-eb1c3d0da4aa": {
+      "sha256": "5adde9f6e24eabe8725e3295f7affc0c5a8b50a983ca6a4849d5aef7fa07a7a7",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d09e39d3b2d3": {
+      "sha256": "8dfdb917d522f15014dbee4686eebd33e8dbbf255a57cb8ea73ccf4d96b231a0",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f879150b5b17": {
+      "sha256": "0ce9dc4e3f267fd11e2a4c486d11701014c7420fd2b684560cd72cb558901ab3",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6de1af0b7396": {
+      "sha256": "8953564c11243e107dbd70e39d2e6269ed8c951db322a6029a03382a9bd850cb",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f05a44ab767a": {
+      "sha256": "de123661bbb882a97e384d71752c024479a5bc965858e6fbe21a7a6f9dc45fd9",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-69efcc62e105": {
+      "sha256": "0f65bc64fe3bc68c8b66c64746dfe0af08437b3db24c1513d17bbb5ecc30ce8d",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-296fc6443702": {
+      "sha256": "7f714d7ec80b9a712439a60ecf2e9128a020a6137cf07f0f015c954cef23798a",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-3ac167da392b": {
+      "sha256": "56931eda0ec04ab9a4e6544ee5e7f50252d7511f4cf21a83c1f95914450b6136",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-96550a0b2621": {
+      "sha256": "2529e65cdaef010893e4f7aa3cee3b678c34eb9025d1790e567a3085458a7b56",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-473b2d59ecc2": {
+      "sha256": "0e0ac0ff5aeb2e64c4f2eb6259d13ffb28f63f413d6b71a5d846eba6f531ce64",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-93e9d76233c2": {
+      "sha256": "014b58e7ec54fe1a93b0edc0aeeb4a8b5a1a696ea6fe88732ef189cf043b8764",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-96d0c1f6dd7e": {
+      "sha256": "70d66d3c43772b2b5eb0b210a3d66fb5e29d8c32937869403f443c97d48f98b2",
+      "reviewer": "Codex: independent official-source re-read and corrected semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-524c6176448c": {
+      "sha256": "5aa032da597467c69a32f566fe8e776d517d185cc8d7f6b9a1d01da658913110",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-0a1510e14c86": {
+      "sha256": "1051b47343281ff3950a6782d382e657482195702b57af0a8fb4f26de899c322",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e019c683a286": {
+      "sha256": "e452104800174b67449d80ff75dd702b660b991f0d127fd86517e3d097e3e21a",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-5ed2b6ae0bb3": {
+      "sha256": "e7c0fe840163eca7007832760edaf83a414bed794bca5753fdba77f0f0c4f549",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-01e6ffed89a7": {
+      "sha256": "9d71a23d994c332e1575309add4ec77cb06e86beeba55ccd5fff9a34266497e2",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-73a5e24cdede": {
+      "sha256": "0eda771d2e3e5c8f39fd410ee44479a484f5cd2d860a85a15a053b35257c8e08",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-075c482f143f": {
+      "sha256": "2d69444f6d55532632d24ddb18fd2777b8524a4cb31b4e95ac18467bb8c953db",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-0b72b3597385": {
+      "sha256": "bba21a3eb445572cf406ea898184b585f9627035f2c2e8e6ae06016cfc25156f",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-493fbfde9884": {
+      "sha256": "206f3b1aa0b806c1859e713ad3ff7a94ce8c3d8d9b9e6e0f5137aef5c74eff03",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e5a3e95b4c0a": {
+      "sha256": "f0066337c86833dbd7754a76a3ae352032c85e571b66c193f1ec7f36586748e6",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a45c8f99d1ab": {
+      "sha256": "596f97661b134d062ec14c5eaac110b1a77242873139d95f9d18cf6594629bfa",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a8a3c43a9dc2": {
+      "sha256": "9b6c109f990bca61062be3eb5b5930a974b1a30de3e4eb13bc2e19b2008195b6",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e0a9db1ada9f": {
+      "sha256": "3d816ef8a71677881a38bb221886c7c131de9252ea87a7a275a18b0e03b88d19",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c6feb9d50a4a": {
+      "sha256": "2f2e71b961142ca05c41cd99ff11bc65109cfc0c9a9a00ccef0c140b37119e2d",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b597cea03484": {
+      "sha256": "1942f3926da45048c2d386918dee71956991a512aa01b35699f652bff22a3c36",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-5501752b98e4": {
+      "sha256": "5a5cbb66128309136118f892c3c78197c8883be0bf1c4a98730bed35b3c3345f",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-f23f935cab9e": {
+      "sha256": "46fa2361957810cde49bc2c2c0644d4bb8ebc134f83a52822595a0d9a3c331fc",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-314af4a69e8c": {
+      "sha256": "0eb3c4339825279d21897779dab69f13ea609c85d32fed95ac27efd16f605db3",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8071d003a93b": {
+      "sha256": "6983e445755ef2d1d6dbc01ca1855d2ed4403d72aa2ff7716ddcc97e0f77f836",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-4a0c9e1a725d": {
+      "sha256": "c80553db1b25ed32a31bd8f027a26ea653e81a58a8eae403b5f286ee34103208",
+      "reviewer": "Codex: independent source reread and semantic review; parent reviewed individual decision and corrected question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-cdd7a57b9f3d": {
+      "sha256": "b50875411a0bd8b46900b6561e02becd5f8068598b4aa73fca68a40928f3bc56",
+      "reviewer": "Codex independent cross-review batch-014/a; parent checked individual decision and question correspondence",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-1b6b947fa7db": {
+      "sha256": "0879d757fc761274ddc92c06bab643d1d02a6f5e23074c48f1beb6abec890bf7",
+      "reviewer": "Codex independent cross-review batch-014/a; parent checked individual decision and question correspondence",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-15a0f2d09c01": {
+      "sha256": "bbc0c54601555fbac1f4a1a5be17aea37c5725f66f9a0f4eaecf021d9ba40843",
+      "reviewer": "Codex independent cross-review batch-014 subagent-b; parent checked individual decision and question correspondence",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-99bdd1017146": {
+      "sha256": "782b86ed60fe60dbb4c4c7e5f9d47eca0bd4acfdee7ea3e32208fc23013487b2",
+      "reviewer": "Codex independent reviewer cross_015_c; parent checked individual decision and question correspondence",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-faa24358c645": {
+      "sha256": "93c2b5964fe6d947f611f80ffddaec5f0d742bb3947a9e6c52926a65dcff6daf",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e6057d0eccf4": {
+      "sha256": "a98b50974b04d5f6d9edd3b9ba2eadb350852c26a0100f49b89b49dffa3812b1",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ff259bcc86ad": {
+      "sha256": "6c3b8434a8c6b56f14d142a558260c2575a41f6c933499f78cf5224345ffd1c1",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-47db3ab122d9": {
+      "sha256": "9ee0db3cbcc53bf1c9aedff5ae59712bd1d8a59aa55edbd12e44c32af785b08f",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-61e0c918a86d": {
+      "sha256": "538619c42a5d8455da9ce756478340bb560f5427eaae89236b4cc1d3c99ab4d7",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b62f75ced85e": {
+      "sha256": "41556397a6405d505657f048e536ceee0ff6e5ae55e2dcd563c81d766d8b57eb",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-7548d184d319": {
+      "sha256": "ca95f31460319d8ca9f8a0ba2aed3d46129e9231c8db8023ecd96cef88cfb4e0",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ab652e0ede4b": {
+      "sha256": "d46e07a1767c43fc9658124f99713652dfc15b6d2f358a5431f54cacdc9a65a6",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-c85bbc3e96cb": {
+      "sha256": "084545c9e50ed946c40902d6f46da9682f141c219cc1f3555f3b6e466d8cc07f",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-8de56a27dc8f": {
+      "sha256": "74ce0250c55650591101d90b9ec4dac62b4d33e4a3e4f1cd12a79875e6249c4b",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-a906cade7ab8": {
+      "sha256": "4dffd6af5c5d426f4e0007cfba133e415fef844c5e65f2e850082c22932907d3",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-daffa269bae2": {
+      "sha256": "304e73fcf383a731c335e1b0856d1f169e67c25b9dc462798522b86e064ab667",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-6cd7d8adde2b": {
+      "sha256": "675436b6658fdb3ca59c735403b6bb87851b7b978ffa6f1d35659db61827720d",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-ab8464e627df": {
+      "sha256": "aced9b22bcb62dc395701f38884cb7bd8a98fd7b334263693a0741b38fb62687",
+      "reviewer": "Codex independent reviewer batch-007 / review9_a; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-aae17fa51c5a": {
+      "sha256": "6e76139c970b0f964aa6a8a266e390791af481c18cfa1a1d0b30d28491d8c6aa",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and corrected mappings",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-b33ef1085981": {
+      "sha256": "3f5196dc07e97cc449ba9d93d8045c1c6a3d5c25bf1164eeb64ddd56ace78a31",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-d99f284b727e": {
+      "sha256": "3501275f0cd082de5a1c8b98c26b4112dc16ea81732ca77b2b993fdf42eca372",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-62058b187669": {
+      "sha256": "d01ecb40d1c970c5d45f50ce02df1774581612d4fda0a364946f69a91ca5c6cc",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-fd0a4b66981c": {
+      "sha256": "ae10e7b0d0f711ed994738f837ea2297d6262bf7dca437bccdeff1981c440c59",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-cd5271722405": {
+      "sha256": "c0051d761aa940c3bb6aa74135dca2789fb58ed3f79d0ebd05d28b4135d62317",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-1e7ddb3d82a9": {
+      "sha256": "44cf95dd6cef842cb841800976cf8692d8f9423529ea10e8271fbccd325e9dcd",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-aaf47b312441": {
+      "sha256": "74d3106821154e85a170cb5ff1d2fd8b8c207a0bbf68ccaf69eb229e35e5a894",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-650a7f22ed72": {
+      "sha256": "e921ffbd313f00c9d75446caf4693269a4966ac884103769efa24cbac0466a07",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-e9956d61e0a9": {
+      "sha256": "a7cd5d0853642d74536abff9533747e00fa29396d1eb720fd9b3a1ac9e2572fb",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-94262c8a53ef": {
+      "sha256": "45f024261325ac5d80813b7b218a2dda4062b7967819a9a6d11bbed8a4959ad4",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    },
+    "utokyo-2c191d3cbc4e": {
+      "sha256": "1d7de4bb0d94e624098cc314dc7c329203470c144feeb59d7c620c6c785147c2",
+      "reviewer": "Codex independent reviewer batch-007/subagent review9_b; parent reviewed individual findings and question mapping",
+      "checkedAt": "2026-10-29",
+      "basis": "existing-reviewed-ledger"
+    }
+  }
+}

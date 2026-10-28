@@ -13,8 +13,12 @@ const positive=a=>a?.optionIds?.[0]===a?.questionId+'_yes';
 export function hasVerifiedEvidence(lab){
  return lab.eligible===true&&lab.review?.status==='verified'&&lab.evidence?.length===3&&FACETS.every(f=>lab.evidence?.some(e=>
   e.facet===f&&e.claim&&e.sourceLocator&&e.checkedAt&&/^https?:\/\//.test(e.sourceURL)&&
-  ALL_QUESTIONS[e.questionId]?.labId===lab.id&&ALL_QUESTIONS[e.questionId]?.facet===f&&ALL_QUESTIONS[e.questionId]?.title===e.question))&&
-  new Set(lab.evidence.map(e=>e.semanticKey)).size===3;
+  ALL_QUESTIONS[e.questionId]?.labId===lab.id&&ALL_QUESTIONS[e.questionId]?.facet===f&&ALL_QUESTIONS[e.questionId]?.title===e.question&&
+  ALL_QUESTIONS[e.questionId]?.lesson===lab.lesson?.intro&&
+  ALL_QUESTIONS[e.questionId]?.sourceURL===lab.lesson?.sourceURL&&
+  ['claim','sourceURL','sourceLocator','checkedAt','semanticKey'].every(k=>ALL_QUESTIONS[e.questionId]?.evidence?.[k]===e[k])))&&
+  new Set(lab.evidence.map(e=>e.semanticKey)).size===3&&
+  new Set(lab.evidence.map(e=>e.question.replace(/[\s？?。、]/g,''))).size===3;
 }
 export function configureCatalog(labs){
  const eligible=labs.filter(hasVerifiedEvidence).sort((a,b)=>a.id.localeCompare(b.id));

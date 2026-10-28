@@ -28,7 +28,7 @@ for id,e in sorted(reviewed_entries().items()):
     add(id+'_understand','この研究で何を調べるか、イメージできた？','understanding',**common,lesson=e['intro'],note='これは理解の確認です。「いいえ」を興味がないという意味には使いません。')
     add(id+'_explain','説明を変えてみました。研究の内容をイメージできた？','understanding-retry',**common,lesson=e['simplerExplanation'],note='まだ分からなくても大丈夫。「いいえ」で別の例へ進めます。')
     for r in e['evidence']:
-        add(id+'_'+r['facet'],r['question'],'evidence',**common,facet=r['facet'],lesson=e['intro'],note='紹介した研究内容を踏まえ、今の気持ちで答えてね。いいえでも別の研究例へ進めます。')
+        add(id+'_'+r['facet'],r['question'],'evidence',**common,facet=r['facet'],evidence={k:r[k] for k in ['claim','sourceURL','sourceLocator','checkedAt','semanticKey']},lesson=e['intro'],note='紹介した研究内容を踏まえ、今の気持ちで答えてね。いいえでも別の研究例へ進めます。')
 for i in range(1,(len(reviewed_entries())+2)//3+1):
     add('checkpoint_'+str(i),'別の研究例も、もう少し見てみる？','checkpoint',note='ここで区切っても大丈夫。いいえで現在の結果と紹介一覧へ進めます。')
 serialized=json.dumps(bank,ensure_ascii=False,indent=2)

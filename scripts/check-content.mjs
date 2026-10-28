@@ -1,9 +1,11 @@
 // Mechanical checks for every published record; semantic correctness requires source review.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
 import {hasVerifiedEvidence} from '../site/engine.js';
 import {ALL_QUESTIONS} from '../site/questions.js';
 const root=new URL('../',import.meta.url);
+execFileSync('python3',['-c','from scripts.evidence_data import reviewed_entries; reviewed_entries()'],{cwd:root,stdio:'pipe'});
 const ledger=JSON.parse(fs.readFileSync(new URL('data/evidence-ledger.json',root))).entries;
 const catalog=JSON.parse(fs.readFileSync(new URL('site/data/catalog.json',root)));
 const entries=new Map(ledger.map(e=>[e.labId,e]));

@@ -39,3 +39,7 @@ python3 scripts/check-review-batch.py batch-001 --require-complete
 ## 再発防止の受入条件（2026-10-29）
 
 追加・変更時は[根本原因と全件対策](ROOT_CAUSE_AND_PREVENTION.md)の5項目を各IDで確認する。研究者名だけの一致、同一URLだけの一致、3つのfacet名だけの一致では受け入れない。隣接組織・兼担・別研究の混入や時制に疑義があれば保留する。独立レビューは入力hashを固定し、修正後の本文を照合する。中央統合後は `npm test` と `npm run content:check` を実行する。未確認は推薦しないという現行方針を維持する。
+
+## 承認本文の固定
+
+`data/review-approvals.json` は確認済み本文のSHA-256を保持する。既存161件の初期値は既存台帳から移行したもので、新しい独立レビューの証拠ではない。新規・変更時は内容レビューを終えた版に対し、承認者・確認日・判断記録の参照を残してから対応する承認を更新する。ハッシュだけを自動更新して検査を通してはいけない。ハッシュはUTF-8の `json.dumps(entry, ensure_ascii=False, sort_keys=True, separators=(',', ':'))` に対して計算する。本文変更は質問再生成・全件検査を必要とする。

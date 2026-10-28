@@ -1,5 +1,6 @@
 """Apply individually reviewed evidence. Keywords never grant recommendation eligibility."""
 import json
+import hashlib
 import re
 from pathlib import Path
 from urllib.parse import urlparse
@@ -11,6 +12,7 @@ def reviewed_entries(path=None):
     topics=json.loads((ROOT/'site/data/topics.json').read_text())
     topic_ids={t['id'] for t in topics}
     groups={t['group'] for t in topics}
+    approvals=json.loads((ROOT/'data/review-approvals.json').read_text())['entries']
     result={}
     for e in entries:
         assert e['labId'] not in result, 'Duplicate evidence review'
@@ -39,6 +41,10 @@ def reviewed_entries(path=None):
             assert all(achievement.get(k) for k in ['text','type','sourceURL','sourceLocator','checkedAt'])
             assert urlparse(achievement['sourceURL']).scheme in ('http','https')
             assert 'locked' not in achievement['sourceURL'].lower()
+        digest=hashlib.sha256(json.dumps(e,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        approval=approvals.get(e['labId'],{})
+        assert approval.get('sha256')==digest, (e['labId'],'review approval missing or stale')
+        assert approval.get('reviewer') and approval.get('checkedAt')
         result[e['labId']]=e
     return result
 
