@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29",
+  "catalogRecords": 2826,
+  "alreadyVerified": 48,
+  "batchSize": 100,
+  "batches": [
+    {
+      "batchId": "batch-001",
+      "count": 100,
+      "input": "data/review-batches/batch-001.input.json",
+      "inputSHA256": "da83053eb2d5d0024ef0b2720b056a7788f4a4439f2ce45759b6f916a2b15999",
+      "status": "assigned",
+      "assignee": "/root/verify_001"
+    },
+    {
+      "batchId": "batch-002",
+      "count": 100,
+      "input": "data/review-batches/batch-002.input.json",
+      "inputSHA256": "368a61a0ad859fc00af3ad9928e02fb08c30287c083937c75e28c00f83d2e8ce",
+      "status": "assigned",
+      "assignee": "/root/verify_002"
+    },
+    {
+      "batchId": "batch-003",
+      "count": 100,
+      "input": "data/review-batches/batch-003.input.json",
+      "inputSHA256": "c594f4d3cb84fba1a85c56daaec8696542909d693a3d0e6d0ee81ab93a8767e6",
+      "status": "assigned",
+      "assignee": "/root/verify_003"
+    },
+    {
+      "batchId": "batch-004",
+      "count": 100,
+      "input": "data/review-batches/batch-004.input.json",
+      "inputSHA256": "ec5571cc1dfc862d72ef4a09f0f1436d532b06bf6dd248b770a6ad39ea0d7b04",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-004"
+    },
+    {
+      "batchId": "batch-005",
+      "count": 100,
+      "input": "data/review-batches/batch-005.input.json",
+      "inputSHA256": "12574d1c4a4bf80cf4a27dad45d638f0f570e70b2ed05c74fb24d8e9ffaf57bf",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-005"
+    },
+    {
+      "batchId": "batch-006",
+      "count": 100,
+      "input": "data/review-batches/batch-006.input.json",
+      "inputSHA256": "ade37fa054fcd1612f360636070d3c2618ea55fd0ee764f96536a59a3ea201b4",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-006"
+    },
+    {
+      "batchId": "batch-007",
+      "count": 100,
+      "input": "data/review-batches/batch-007.input.json",
+      "inputSHA256": "58c24ae54899987c41fd91595bafe5a554a865e795f462ed7f0e95cbcde2fa88",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-007"
+    },
+    {
+      "batchId": "batch-008",
+      "count": 100,
+      "input": "data/review-batches/batch-008.input.json",
+      "inputSHA256": "53021937e30d31ac5f818220625b8193a1d32aecc824413ba92e65b2790b7141",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-008"
+    },
+    {
+      "batchId": "batch-009",
+      "count": 100,
+      "input": "data/review-batches/batch-009.input.json",
+      "inputSHA256": "688603c330a1042165c1ddc4ce626b4b0e8f55c3dff8bc7290c465d79151d757",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-009"
+    },
+    {
+      "batchId": "batch-010",
+      "count": 100,
+      "input": "data/review-batches/batch-010.input.json",
+      "inputSHA256": "35ecf929d7029a8e05ffc06e0f17495727759bf52b6930efa9c17fc1a61604a7",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-010"
+    },
+    {
+      "batchId": "batch-011",
+      "count": 100,
+      "input": "data/review-batches/batch-011.input.json",
+      "inputSHA256": "78339abf71f9e226c7b762c3a2aef649818d7e4c94fa3d83f41a63a8b728d5ec",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-011"
+    },
+    {
+      "batchId": "batch-012",
+      "count": 100,
+      "input": "data/review-batches/batch-012.input.json",
+      "inputSHA256": "75733004c94c053417b8f46803c2622b57f48149ec62ec358ae1ecc79e0bacc8",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-012"
+    },
+    {
+      "batchId": "batch-013",
+      "count": 100,
+      "input": "data/review-batches/batch-013.input.json",
+      "inputSHA256": "a6d61237ba16c863e51c7fccba098b4ae4cade4fcd2f34a342e88f83833f118e",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-013"
+    },
+    {
+      "batchId": "batch-014",
+      "count": 100,
+      "input": "data/review-batches/batch-014.input.json",
+      "inputSHA256": "ee2cfccc35ba1e5a311218955b6e740db4df056219632398c6cfbdb66efe14a7",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-014"
+    },
+    {
+      "batchId": "batch-015",
+      "count": 100,
+      "input": "data/review-batches/batch-015.input.json",
+      "inputSHA256": "4172c894c34587b8775d1fe55d6a4e433c889d16db9dee961bb24844f81f357b",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-015"
+    },
+    {
+      "batchId": "batch-016",
+      "count": 100,
+      "input": "data/review-batches/batch-016.input.json",
+      "inputSHA256": "026309dc9bb91116d4746c18ab5c07d743b47a9b9c2eddaf5fd835ce1a6c8af1",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-016"
+    },
+    {
+      "batchId": "batch-017",
+      "count": 100,
+      "input": "data/review-batches/batch-017.input.json",
+      "inputSHA256": "51223046a9676b7cd65a70f96a4bf86c4d5a41e44ffd61bc4b59c7d9590fc060",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-017"
+    },
+    {
+      "batchId": "batch-018",
+      "count": 100,
+      "input": "data/review-batches/batch-018.input.json",
+      "inputSHA256": "aaa18c16f8bc91ba51942192946b68273a9cf588ba0446deb36cacb5f8b890ce",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-018"
+    },
+    {
+      "batchId": "batch-019",
+      "count": 100,
+      "input": "data/review-batches/batch-019.input.json",
+      "inputSHA256": "f0c1991d8f517d1dfacecb84a9bc864f2e4c391aacddad8116d3e5a2ef32e6ae",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-019"
+    },
+    {
+      "batchId": "batch-020",
+      "count": 100,
+      "input": "data/review-batches/batch-020.input.json",
+      "inputSHA256": "424fe28e38788aef0151462ebd6fa64ed557f2607eb4bd1cecce58938d1e19c4",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-020"
+    },
+    {
+      "batchId": "batch-021",
+      "count": 100,
+      "input": "data/review-batches/batch-021.input.json",
+      "inputSHA256": "b51eae705b877c3a013f658ce4081c6624365714d11f4f199b8928d220615216",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-021"
+    },
+    {
+      "batchId": "batch-022",
+      "count": 100,
+      "input": "data/review-batches/batch-022.input.json",
+      "inputSHA256": "9a8667f99482dd86368052763385755fa72f988374d54e8cccb7d039ed4681a3",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-022"
+    },
+    {
+      "batchId": "batch-023",
+      "count": 100,
+      "input": "data/review-batches/batch-023.input.json",
+      "inputSHA256": "d6e0d63539a44e49d87a49309a9d045ca16014633f75a1d68f83e8982a492fec",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-023"
+    },
+    {
+      "batchId": "batch-024",
+      "count": 100,
+      "input": "data/review-batches/batch-024.input.json",
+      "inputSHA256": "54abac6e8d9fb4a7d6d2c0e9a40dabd7991e318e6d1b2edb0b52bbee5dbadf6e",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-024"
+    },
+    {
+      "batchId": "batch-025",
+      "count": 100,
+      "input": "data/review-batches/batch-025.input.json",
+      "inputSHA256": "6a332235400f57b33bbbc718dec68158c5dff685d2ef0596822a79c2c13d4af5",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-025"
+    },
+    {
+      "batchId": "batch-026",
+      "count": 100,
+      "input": "data/review-batches/batch-026.input.json",
+      "inputSHA256": "5cc6af3b34d25c8919844134463e80cc57ac2b19299e724ab45e2b75a936012d",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-026"
+    },
+    {
+      "batchId": "batch-027",
+      "count": 100,
+      "input": "data/review-batches/batch-027.input.json",
+      "inputSHA256": "afd52c40715687aaf62c07ee238d1596d1e169600bc987e2d8f00c2c89663f3b",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-027"
+    },
+    {
+      "batchId": "batch-028",
+      "count": 78,
+      "input": "data/review-batches/batch-028.input.json",
+      "inputSHA256": "cec01a1df201344c127aa85a0ed45127e65f07a7dd2049299e08c771c4360ae0",
+      "status": "dispatched-to-chat",
+      "assignee": "dedicated-chat-batch-028"
+    }
+  ]
+}

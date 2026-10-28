@@ -10,3 +10,15 @@
 .count-presets button{white-space:nowrap}@media(max-width:680px){.count-presets{gap:8px}.count-presets button{font-size:20px;padding:8px;min-width:58px}.count-presets button span{font-size:10px;margin-left:3px}.count-controls{gap:12px}.custom-count input{width:54px}}
 .coverage-progress{position:relative;margin-bottom:35px}.coverage-progress .progress-track{margin-bottom:8px}.coverage-progress>span{font-size:10px;color:var(--muted)}.adaptive-controls{display:flex;flex-direction:column;align-items:flex-end;gap:10px}.adaptive-controls .button{font-size:12px;padding:10px 16px;min-height:44px}.match-reasons ol{padding-left:19px;margin:14px 0 0}.match-reasons li{margin:12px 0}.match-reasons li p{margin:4px 0}.evidence-facet{font-size:10px;color:var(--blue);font-weight:700}.match-reasons small{font-size:9px;color:var(--muted)}.evidence-notice{border:1px solid #e0cc95;background:#fff5d4;padding:20px;margin:15px 0;border-radius:8px;font-size:12px;line-height:1.9}.evidence-notice p{margin:8px 0 0;color:var(--muted)}.continue-button{margin:8px 0 15px}.adaptive-note{font-size:10px;line-height:1.9;color:var(--muted);margin:10px 0 20px}.binary-shell .quiz-progress>span{font-size:22px}.binary-shell .quiz-progress small{font-size:10px}.question-section .binary-help{margin-bottom:0}@media(max-width:680px){.adaptive-controls{align-items:stretch}.adaptive-controls .button{width:100%}.binary-shell .quiz-progress>span{font-size:20px}.binary-shell .quiz-progress small{display:block;text-align:right;font-size:9px}.coverage-progress{margin-bottom:25px}.match-reasons li p{font-size:11px}.evidence-notice{font-size:11px;padding:16px}.adaptive-note{font-size:9px}.time-note{line-height:1.8}.results-tools>div{flex-wrap:wrap}}
 .migration-note{font-size:11px;color:var(--muted);background:#e9eef8;padding:12px;border-radius:6px;margin-top:12px;line-height:1.8}
+
+/* Evidence-backed learning cards and the independent catalogue. */
+.lesson-card { background: #eff6f3; border: 1px solid #cdded6; border-radius: 14px; padding: 1.3rem; margin: 1rem 0 1.6rem; text-align: left; }
+.lesson-card > span { font-size: .8rem; color: #3e655a; }
+.lesson-card h2 { font-size: 1.25rem; margin: .6rem 0; }
+.lesson-card p { line-height: 1.9; margin: .7rem 0; }
+.lesson-card a { font-size: .85rem; text-decoration: underline; }
+.evidence-claim { font-size: .9rem; color: #334e49; }
+#catalogue-search { width: 100%; padding: .8rem; border: 1px solid #9ba8b4; border-radius: 8px; margin: .5rem 0; }
+.catalogue-pages { display: flex; justify-content: space-between; gap: 1rem; }
+.catalogue-pages button { padding: .7rem 1rem; border: 1px solid #aab6c1; border-radius: 8px; }
+.saved-list small { display: block; line-height: 1.6; }

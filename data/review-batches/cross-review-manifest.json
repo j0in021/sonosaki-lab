@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29",
+  "assignments": [
+    {
+      "sourceBatch": "batch-022",
+      "reviewerBatch": "batch-016",
+      "status": "dispatched",
+      "acceptance": "Individual source and semantic review, not structure-only approval"
+    },
+    {
+      "sourceBatch": "batch-016",
+      "reviewerBatch": "batch-022",
+      "status": "dispatched",
+      "acceptance": "Individual source and semantic review, not structure-only approval"
+    },
+    {
+      "sourceBatch": "batch-005",
+      "reviewerBatch": "batch-008",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual source, identity, three-facet semantic mapping and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-008",
+      "reviewerBatch": "batch-005",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual source, identity, three-facet semantic mapping and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-002",
+      "reviewerBatch": "batch-001",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-003",
+      "reviewerBatch": "batch-002",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-004",
+      "reviewerBatch": "batch-003",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-006",
+      "reviewerBatch": "batch-004",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-007",
+      "reviewerBatch": "batch-006",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-009",
+      "reviewerBatch": "batch-007",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-010",
+      "reviewerBatch": "batch-009",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-011",
+      "reviewerBatch": "batch-010",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-012",
+      "reviewerBatch": "batch-011",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-013",
+      "reviewerBatch": "batch-012",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-014",
+      "reviewerBatch": "batch-013",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-015",
+      "reviewerBatch": "batch-014",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-017",
+      "reviewerBatch": "batch-015",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-018",
+      "reviewerBatch": "batch-017",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-019",
+      "reviewerBatch": "batch-018",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-020",
+      "reviewerBatch": "batch-019",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-021",
+      "reviewerBatch": "batch-020",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-023",
+      "reviewerBatch": "batch-021",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-024",
+      "reviewerBatch": "batch-023",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-025",
+      "reviewerBatch": "batch-024",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-026",
+      "reviewerBatch": "batch-025",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-027",
+      "reviewerBatch": "batch-026",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-028",
+      "reviewerBatch": "batch-027",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    },
+    {
+      "sourceBatch": "batch-001",
+      "reviewerBatch": "batch-028",
+      "status": "dispatched-after-original-research",
+      "acceptance": "Individual identity/source/three-facet semantic and accessible explanation review"
+    }
+  ],
+  "integrationRule": "Only individually accepted and corrected entries can be merged. A URL check or batch completion is not acceptance.",
+  "findingsUnderReview": [
+    {
+      "sourceBatch": "batch-022",
+      "reviewerBatch": "batch-016",
+      "status": "needs-source-check",
+      "finding": "担当の途中報告では生体分析化学・薬用植物園・生命物理化学の別研究室情報混在が疑われる。家族研究の問いと方法が別例を指す問題も修正中。独立レビュー未完了であり、中央へ一括統合しない。"
+    }
+  ]
+}

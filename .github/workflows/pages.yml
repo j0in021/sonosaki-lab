@@ -24,6 +24,8 @@ jobs:
         run: node scripts/check-site.mjs
       - name: Verify all candidate paths and three-reason coverage
         run: npm run audit:check
+      - name: Require reviewed-only recommendations and explicit pending status
+        run: npm run release:check
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

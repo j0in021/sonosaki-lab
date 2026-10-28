@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "observations": [
+    {
+      "labId": "ritsumeikan-games",
+      "checkedAt": "2026-10-29",
+      "sourceURL": "https://www.rcgs.jp/",
+      "result": "fetch-timeout",
+      "nextAction": "公式の個別研究ページまたは公式機関の別ページで、3種類の対応を確認する。タイムアウトを研究不在と解釈しない。"
+    },
+    {
+      "labId": "ritsumeikan-games",
+      "checkedAt": "2026-10-29",
+      "sourceURL": "https://www.rcgs.jp/?page_id=204",
+      "result": "resolved-with-project-page",
+      "finding": "公式の事業ページを取得できたため、3種類の個別対応を台帳へ記録。トップページの一時取得失敗とは分離。"
+    },
+    {
+      "labId": "utokyo-b62a318993f9",
+      "checkedAt": "2026-10-29",
+      "sourceURL": "https://www.c.u-tokyo.ac.jp/info/research/faculty/list/ask/f002320.html",
+      "result": "insufficient-specific-evidence",
+      "finding": "公式教員紹介では社会運動・闘争の政治研究を確認。具体的な研究の問いと方法は未記載。スポーツへのタグは誤り。",
+      "confirmedTopics": [
+        "society",
+        "politics"
+      ],
+      "correctedDescription": "社会の変化を求める人々の活動や、政治をめぐる対立を研究しています。具体的な問い・調べ方はこの紹介ページだけでは確認できません。",
+      "nextAction": "本人または所属大学の詳しい研究紹介・論文概要で、具体的な問いと調査方法を確認する。"
+    },
+    {
+      "labId": "utokyo-ce93426c9162",
+      "checkedAt": "2026-10-29",
+      "result": "resolved-via-official-alternate",
+      "attemptedURL": "https://www.gengo.l.u-tokyo.ac.jp/",
+      "sourceURL": "https://gengo.l.u-tokyo.ac.jp/",
+      "note": "www付きURLは取得タイムアウト。学部公式の研究室紹介と現行の研究室サイト・教職員一覧を照合し、個別研究例を確認した。"
+    },
+    {
+      "labId": "utokyo-b62a318993f9",
+      "checkedAt": "2026-10-29",
+      "sourceURL": "https://ask.c.u-tokyo.ac.jp/wada.html",
+      "result": "resolved-with-detailed-profile",
+      "finding": "専攻公式の自己紹介でメキシコの抗議行動という問いと、新聞記事のデータベース化・分析という方法を確認。以前の根拠不足観察を保全し、個別台帳へ対応を追加した。"
+    },
+    {
+      "labId": "utokyo-f3409b15b49d",
+      "checkedAt": "2026-10-29",
+      "result": "resolved-via-official-alternate",
+      "attemptedURL": "https://www.l.u-tokyo.ac.jp/english/",
+      "sourceURL": "https://english.l.u-tokyo.ac.jp/",
+      "note": "旧URLの取得に失敗。現行の研究室サイトと学部公式紹介を照合して、英語学の研究・教育内容を確認した。"
+    },
+    {
+      "labId": "utokyo-d7d6fec0e0b4",
+      "checkedAt": "2026-10-29",
+      "result": "resolved-via-publisher-abstract",
+      "attemptedURL": "https://doi.org/10.1108/S1521-613620250000030008",
+      "sourceURL": "https://www.emerald.com/books/edited-volume/17089/chapter-abstract/94091879/Lay-Judges-and-the-Hesitant-Shift-in-Japan-s?redirectedFrom=PDF",
+      "note": "DOI経由の取得に失敗。出版社公式ページの要旨を直接取得し、対象・問い・方法・結論を確認した。購読が必要な本文の確認とは区別する。"
+    }
+  ]
+}

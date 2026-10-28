@@ -6,3 +6,6 @@ reports/
 .env.*
 input/
 tmp/
+
+__pycache__/
+*.pyc

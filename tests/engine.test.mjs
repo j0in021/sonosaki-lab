@@ -1,80 +1,127 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {QUESTION_BANK,ALL_QUESTIONS,FACETS,MAX_QUESTIONS,BROAD_GROUPS} from '../site/questions.js';
-import {configureCatalog,assessmentState,getNextQuestion,normalizeAnswers,recommend,validateCount,buildProfile,reasonsFor,summaryText,expectedInformationGain,shuffled,recommendationPool} from '../site/engine.js';
+import {QUESTION_BANK,ALL_QUESTIONS,FACETS,MAX_QUESTIONS} from '../site/questions.js';
+import {configureCatalog,getNextQuestion,assessmentState,normalizeAnswers,recommend,validateCount,buildProfile,reasonsFor,summaryText,shuffled} from '../site/engine.js';
+import {editAnswer,savedIds,writeSession} from '../site/session.js';
 const catalog=JSON.parse(fs.readFileSync(new URL('../site/data/catalog.json',import.meta.url)));
 const topics=JSON.parse(fs.readFileSync(new URL('../site/data/topics.json',import.meta.url)));
 const map=Object.fromEntries(topics.map(t=>[t.id,t]));
-const answer=(q,yes,count=5)=>({questionId:q.id,optionIds:[q.id+(yes?'_yes':'_no')],targetCount:count});
-function journey(tags=[],count=5,seed=123,all=null){
+const yes=(q,value,count=5,continued=false)=>({questionId:q.id,optionIds:[q.id+(value?'_yes':'_no')],targetCount:count,continued});
+function journey(choose,count=5,seed=123,exploreAll=false){
  configureCatalog(catalog.labs);const answers=[];
- while(true){const q=getNextQuestion(answers,count,seed);if(!q)break;answers.push(answer(q,all??q.topics.some(t=>tags.includes(t)),count));assert(answers.length<=MAX_QUESTIONS);}
+ while(true){
+  let q=getNextQuestion(answers,count,seed),continued=false;
+  if(!q&&exploreAll&&assessmentState(answers,count,seed).stopReason==='requested-evidence-ready'){
+   q=getNextQuestion(answers,count,seed,true);continued=!!q;
+  }
+  if(!q)break;answers.push(yes(q,choose(q),count,continued));assert(answers.length<=MAX_QUESTIONS);
+ }
  return answers;
 }
-test('Every source row remains traceable; eligible records all have three evidence facets',()=>{
+test('Original records are retained, with explicit per-record review issues',()=>{
  assert.equal(new Set(catalog.labs.flatMap(l=>l.sourceRowIds)).size,2988);
- assert.equal(catalog.labs.filter(l=>l.eligible).length,2562);
+ assert.equal(catalog.labs.length,2826);
+ for(const lab of catalog.labs){assert(lab.review);if(!lab.eligible){assert(lab.review.issues.includes('individual-three-facet-evidence-unreviewed'));assert(lab.review.nextAction);}}
+ assert(catalog.labs.some(l=>l.review.issues.includes('individual-description-unconfirmed')));
+ assert(catalog.labs.some(l=>l.review.issues.includes('topic-mapping-missing')));
+});
+test('Only individually documented questions can supply three distinct evidence facets',()=>{
+ const ids=new Set();for(const q of QUESTION_BANK){assert(!ids.has(q.id));ids.add(q.id);assert.deepEqual(q.options.map(o=>o.label),['はい','いいえ']);}
  for(const lab of catalog.labs.filter(l=>l.eligible)){
-  const witnesses=QUESTION_BANK.filter(q=>q.stage==='topic'&&q.topics.some(t=>lab.topics[t]));
-  assert.deepEqual([...new Set(witnesses.map(q=>q.facet))].sort(),[...FACETS].sort(),lab.id);
-  assert(lab.sources.description||lab.sources.directory[0]);
+  assert.equal(lab.review.status,'verified');assert.equal(lab.evidence.length,3);
+  assert.deepEqual(lab.evidence.map(e=>e.facet),FACETS);
+  for(const e of lab.evidence){assert(e.claim&&e.sourceLocator&&e.checkedAt);assert.equal(ALL_QUESTIONS[e.questionId].labId,lab.id);}
  }
 });
-test('Every question is strictly yes/no and every topic has distinct interest, inquiry, activity prompts',()=>{
- const ids=new Set();for(const q of QUESTION_BANK){assert(!ids.has(q.id));ids.add(q.id);assert.deepEqual(q.options.map(o=>o.label),['はい','いいえ']);assert.deepEqual(q.options[1].topics,{});for(const tag of q.topics)assert(map[tag]);}
- for(const t of topics)assert.deepEqual(QUESTION_BANK.filter(q=>q.stage==='topic'&&q.topics.includes(t.id)).map(q=>q.facet),FACETS);
- assert.equal(BROAD_GROUPS.length,11);
-});
-test('Narrative transitions do not count as recommendation evidence',()=>{
- configureCatalog(catalog.labs);const answers=[];
- while(getNextQuestion(answers)?.id!=='broad_culture'){
-  const q=getNextQuestion(answers);assert(q);answers.push(answer(q,false));
- }
- const q=getNextQuestion(answers);answers.push(answer(q,true));
- assert.equal(getNextQuestion(answers).id,'story_curse');answers.push(answer(getNextQuestion(answers),true));
- assert.equal(getNextQuestion(answers).id,'story_history');answers.push(answer(getNextQuestion(answers),true));
- assert.equal(getNextQuestion(answers).id,'story_people');answers.push(answer(getNextQuestion(answers),true));
- assert.equal(recommend(catalog.labs,answers,5).length,0);
-});
-test('No displayed recommendation has fewer than three source-linked, distinct-facet yes answers',()=>{
- for(const tags of [['religion','folklore','history'],['ai','software','robots'],['medicine','cells'],['quantum']]){
-  const a=journey(tags);const results=recommend(catalog.labs,a,5,123);assert(results.length>0);
-  for(const lab of results){assert.equal(lab.reasons.length,3);assert.equal(new Set(lab.reasons.map(r=>r.facet)).size,3);assert.equal(new Set(lab.reasons.map(r=>r.questionId)).size,3);for(const r of lab.reasons){assert(a.some(x=>x.questionId===r.questionId&&x.optionIds[0]===r.questionId+'_yes'));assert(lab.topics[r.topicId]);assert.match(r.sourceURL,/^https?:\/\//);}}
+test('Reviewing recommendation reasons does not certify an unreviewed legacy achievement',()=>{
+ const ledger=JSON.parse(fs.readFileSync(new URL('../data/evidence-ledger.json',import.meta.url)));
+ const reviews=new Map(ledger.entries.map(e=>[e.labId,e.achievementReview]));
+ assert(catalog.labs.some(l=>l.eligible&&l.legacyAchievement?.text&&!reviews.get(l.id)));
+ for(const lab of catalog.labs){
+  const review=reviews.get(lab.id);
+  if(review){assert.equal(lab.achievement,review.text);assert.equal(lab.sources.achievement,review.sourceURL);}
+  else{assert.equal(lab.achievement,null);assert.equal(lab.achievementType,null);assert.equal(lab.sources.achievement,null);}
  }
 });
-test('There is no fixed twenty-question stop, every broad field is checked, and model-gain stop is explicit',()=>{
- const counts=[];for(const tags of [['history','religion','folklore'],['ai','software','robots']]){const a=journey(tags);const state=assessmentState(a,5,123);assert.equal(state.coverage,11);assert(state.ready);assert(state.maxGain<=.01);assert.equal(getNextQuestion(a,5,123),null);counts.push(a.length);}
- assert.notEqual(counts[0],counts[1]);assert(counts.some(n=>n>20));
+test('Generic games and sports answers cannot recommend market design, plant motion, or sports law',()=>{
+ configureCatalog(catalog.labs);
+ for(const [id,tag] of [['utokyo-a6157ef84202','games'],['utokyo-3e0d96953758','sports'],['utokyo-c38bfde32a4e','sports']]){
+  const fabricatedLegacy=FACETS.map(f=>({questionId:`topic_${tag}_${f}`,optionIds:[`topic_${tag}_${f}_yes`]}));
+  assert.equal(reasonsFor(buildProfile(fabricatedLegacy),catalog.labs.find(l=>l.id===id)).length,0);
+  assert.equal(recommend(catalog.labs,fabricatedLegacy,20).length,0);
+ }
+ const a=journey(q=>q.topics.includes('robots')||q.stage==='checkpoint',20);
+ assert(!recommend(catalog.labs,a,20).some(l=>l.id==='utokyo-a6157ef84202'));
 });
-test('All-no exhausts finitely and never receives invented reasons or padded recommendations',()=>{
- const a=journey([],5,123,false);assert.equal(a.length,MAX_QUESTIONS);assert.equal(new Set(a.map(x=>x.questionId)).size,MAX_QUESTIONS);assert.equal(recommend(catalog.labs,a,20).length,0);assert(assessmentState(a).exhausted);assert(!assessmentState(a).ready);
+test('All reviewed records have a legal positive path, without counting broad or comprehension answers',()=>{
+ for(const lab of catalog.labs.filter(l=>l.eligible)){
+  const a=journey(q=>q.labId===lab.id||q.stage==='checkpoint',1);
+  const r=recommend(catalog.labs,a,1,123);assert.equal(r[0]?.id,lab.id);
+  assert.deepEqual(normalizeAnswers(a,1,123),a);
+  for(const e of r[0].reasons){assert.equal(ALL_QUESTIONS[e.questionId].stage,'evidence');assert(a.some(x=>x.questionId===e.questionId&&x.optionIds[0]===e.questionId+'_yes'));}
+ }
 });
-test('Requested counts and researcher deduplication hold whenever sufficient three-reason candidates exist',()=>{
- const a=journey(['ai','software','robots']);for(const n of [1,3,5,10,20]){const r=recommend(catalog.labs,a,n,21);assert.equal(r.length,n);const keys=r.map(l=>l.leadResearcherKey||l.id);assert.equal(new Set(keys).size,n);}
+test('Understanding no provides a simpler explanation; repeated no never creates a preference penalty or reason',()=>{
+ configureCatalog(catalog.labs);const a=[];
+ while(getNextQuestion(a,5,123).stage!=='understanding'){const q=getNextQuestion(a,5,123);a.push(yes(q,false));}
+ const q=getNextQuestion(a,5,123);a.push(yes(q,false));const retry=getNextQuestion(a,5,123);
+ assert.equal(retry.stage,'understanding-retry');assert.equal(retry.labId,q.labId);assert.notEqual(retry.lesson,q.lesson);
+ a.push(yes(retry,false));assert.notEqual(getNextQuestion(a,5,123).labId,q.labId);
+ assert.equal(buildProfile(a).traces.length,0);assert.equal(recommend(catalog.labs,a,5).length,0);
 });
-test('Equal profiles are not permanently ordered by ID, CSV position, or university',()=>{
- const a=journey(['quantum']);const pool=recommendationPool(catalog.labs,a);assert(pool.length>1);
- const firsts=new Set(Array.from({length:100},(_,seed)=>recommend(catalog.labs,a,1,seed)[0].id));assert(firsts.size>1);
- const original=recommend(catalog.labs,a,5,9);configureCatalog(catalog.labs);const shuffledInput=shuffled(catalog.labs,8);const result=recommend(shuffledInput,a,5,9);assert(result.every(l=>l.reasons.length===3));assert.deepEqual(result.map(l=>l.id),original.map(l=>l.id));
+test('Every study asks understanding, interest, inquiry, activity in order; missing yes cannot be padded',()=>{
+ const a=journey(()=>true,20,123,true);
+ for(const lab of catalog.labs.filter(l=>l.eligible))assert.deepEqual(a.filter(x=>ALL_QUESTIONS[x.questionId].labId===lab.id).map(x=>ALL_QUESTIONS[x.questionId].facet||'understand'),['understand',...FACETS]);
+ assert.deepEqual(normalizeAnswers(a,20,123),a);
+ assert.equal(assessmentState(a,20,123).stopReason,'examples-exhausted');
+ const r=recommend(catalog.labs,a,20);assert.equal(r.length,Math.min(20,catalog.stats.eligible));
+ for(const lab of r)assert.equal(new Set(lab.reasons.map(e=>e.semanticKey)).size,3);
+});
+test('No-interest and theme-only paths reach an explicit pause after three examples, rather than 155 questions',()=>{
+ for(const choose of [()=>false,q=>q.stage.startsWith('understanding')||q.facet==='interest'||q.stage==='broad']){
+  const a=journey(choose,5);const s=assessmentState(a,5,123);
+  assert.equal(s.stopReason,'user-pause');assert.equal(s.completedExamples,3);assert(a.length<=22);assert.equal(recommend(catalog.labs,a,5).length,0);
+ }
+});
+test('User can resume a pause, and the resumption plus all following answers replay',()=>{
+ const a=journey(()=>false,5);const q=getNextQuestion(a,5,123,true);assert(q);a.push(yes(q,true,5,true));
+ assert.deepEqual(normalizeAnswers(a,5,123),a);
+ const next=getNextQuestion(a,5,123);assert.equal(next.facet,'interest');
+});
+test('Requested counts, same-condition shuffle, input-order invariance, and diversity retain grounded candidates',()=>{
+ const a=journey(q=>q.id!=='compare_breadth',20,123,true),available=catalog.stats.eligible;
+ for(const n of [1,3,5,20])assert.equal(recommend(catalog.labs,a,n).length,Math.min(n,available));
+ const initial=recommend(catalog.labs,a,5,7).map(l=>l.id);
+ assert.deepEqual(recommend(shuffled(catalog.labs,42),a,5,7).map(l=>l.id),initial);
+ const firsts=new Set(Array.from({length:Math.max(1000,available*50)},(_,seed)=>recommend(catalog.labs,a,1,seed)[0].id));
+ assert.equal(firsts.size,available);
+ const diverse=journey(()=>true,20,123,true);
+ const diverseResults=recommend(catalog.labs,diverse,20,7);
+ assert.equal(diverseResults.length,Math.min(20,available));
+ assert(diverseResults.every(l=>l.reasons.length===3));
  configureCatalog(catalog.labs);
 });
-test('Invalid states are rejected, saved branches replay, and changed result count preserves the recorded path',()=>{
+test('Editing preserves the selected question and its recorded context after the count changes, including reload',()=>{
+ const a=journey(()=>true,20);const index=a.findIndex(x=>ALL_QUESTIONS[x.questionId].facet==='activity');
+ const edited=editAnswer(a,index);assert.equal(edited.editing.questionId,a[index].questionId);assert.equal(edited.editing.targetCount,20);
+ const memory={};const storage={setItem:(k,v)=>memory[k]=v};
+ assert(writeSession(storage,'key',{count:1,seed:123,recommendationSeed:0,answers:edited.answers,editing:edited.editing,saved:new Set()},4));
+ const restored=JSON.parse(memory.key);
+ assert.equal(restored.editing.questionId,a[index].questionId);
+ const changed={...restored.editing,optionIds:[restored.editing.questionId+'_no']};
+ assert.deepEqual(normalizeAnswers([...restored.answers,changed],1,123),[...restored.answers,changed]);
+});
+test('Saving 101+ candidates is lossless; storage failures are reported, not represented as success',()=>{
+ const ids=Array.from({length:2826},(_,i)=>`lab-${i}`),memory={};const state={saved:new Set(ids),answers:[],count:5};
+ assert(writeSession({setItem:(k,v)=>memory[k]=v},'key',state,4));
+ assert.deepEqual(savedIds(JSON.parse(memory.key).saved),ids);
+ assert.equal(writeSession({setItem:()=>{throw new Error('quota');}},'key',state,4),false);
+});
+test('Invalid states are rejected and memos include individual source locators',()=>{
  for(const v of [0,-1,1.5,21,'3abc',null,''])assert.throws(()=>validateCount(v),RangeError);
- const a=journey(['history']);assert.deepEqual(normalizeAnswers(a,5,123),a);assert.deepEqual(normalizeAnswers(a,20,123),a);
- assert.deepEqual(normalizeAnswers([{questionId:a[0].questionId,optionIds:['<script>']}]),[]);
- const changed=structuredClone(a);changed[1].questionId='nonexistent';assert.equal(normalizeAnswers(changed,5,123).length,1);
- const q=ALL_QUESTIONS[a[0].questionId];assert.deepEqual(normalizeAnswers([{questionId:q.id,optionIds:[q.id+'_yes',q.id+'_no']}]),[]);
-});
-test('Expected information is zero for a non-discriminating split; text memo includes all three reasons',()=>{
- configureCatalog(catalog.labs);const weights=Array.from({length:566},(_,i)=>i===0?1:0);assert(Math.abs(expectedInformationGain(QUESTION_BANK[0],weights))<1e-10);
- const a=journey(['folklore','religion']);const r=recommend(catalog.labs,a,3,2);const memo=summaryText(r,a,map);assert(memo.includes('異なる3つの回答'));for(const x of r)for(const reason of x.reasons)assert(memo.includes(reason.label));
-});
-
-test('A student can continue after model stopping; continuation history replays',()=>{
- const a=journey(['history','religion','folklore']);
- assert.equal(getNextQuestion(a,5,123),null);
- const next=getNextQuestion(a,5,123,true);assert(next);
- a.push({...answer(next,true),continued:true});
- assert.deepEqual(normalizeAnswers(a,5,123),a);
+ const a=journey(()=>true,5);assert.deepEqual(normalizeAnswers(a,20,123),a);
+ assert.deepEqual(normalizeAnswers([{questionId:a[0].questionId,optionIds:['invalid']}],5,123),[]);
+ const r=recommend(catalog.labs,a,3),memo=summaryText(r,a,map);
+ for(const lab of r)for(const e of lab.reasons){assert(memo.includes(e.claim));assert(memo.includes(e.sourceLocator));}
 });

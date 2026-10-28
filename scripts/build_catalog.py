@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+from evidence_data import apply_reviews
 from urllib.parse import unquote, urlparse, urlunparse
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,7 +94,7 @@ def main():
             "achievement": None, "achievementType": None,
             "url": link, "sources": {"directory": [], "description": "", "achievement": None},
             "topics": {}, "methods": [], "checkedAt": row["確認日"], "sourceRowIds": [],
-            "eligible": False, "_hasName": bool(name), "_descriptionQuality": 0,
+            "sourceRecords": [], "eligible": False, "_hasName": bool(name), "_descriptionQuality": 0,
             "leadResearcherKey": ("東京大学|" + norm(re.sub(r"[A-Za-z].*$", "", person_label(researcher)))) if researcher and re.search(r"[一-龥ぁ-んァ-ヶ]", person_label(researcher)) else ("東京大学|" + norm(person_label(researcher)).lower()) if researcher else "",
         })
         if name and not entry["_hasName"]:
@@ -103,6 +104,7 @@ def main():
                 if part and part not in entry[target]:
                     entry[target].append(part)
         entry["sourceRowIds"].append(index)
+        entry["sourceRecords"].append({"row":index,"field":row["研究分野・テーマ"],"descriptionStatus":row["研究内容の確認状況"],"url":safe_url(row["研究内容の根拠URL"].split(" ; ")[0])})
         entry["sources"]["directory"] = list(dict.fromkeys(entry["sources"]["directory"] + directory_urls))
         basis = row["研究内容の確認状況"]
         quality = 0 if basis in {"個別テーマ未確認", "所属分野のみ確認"} else 2 if basis == "個別ページの研究紹介" else 1
@@ -142,10 +144,11 @@ def main():
         labs.append(entry)
     extras = json.loads((ROOT / "site/data/extra-labs.json").read_text())
     labs.extend(extras)
+    apply_reviews(labs)
     output = {
-        "schemaVersion": 1, "checkedAt": "2026-10-28",
+        "schemaVersion": 2, "checkedAt": "2026-10-29",
         "source": {"name": args.csv.name, "sha256": hashlib.sha256(args.csv.read_bytes()).hexdigest(), "rows": len(records)},
-        "stats": {"sourceRows": len(records), "entries": len(labs), "eligible": sum(l["eligible"] for l in labs), "additionalUniversities": len({e["university"] for e in extras}), "excluded": excluded},
+        "stats": {"sourceRows": len(records), "entries": len(labs), "eligible": sum(l["eligible"] for l in labs), "additionalUniversities": len({e["university"] for e in extras}), "excluded": excluded, "pendingReview": sum(not l["eligible"] for l in labs)},
         "labs": labs,
     }
     target = ROOT / "site/data/catalog.json"

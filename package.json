@@ -9,7 +9,9 @@
     "check": "node scripts/check-site.mjs",
     "dev": "python3 -m http.server 4173 --directory site --bind 127.0.0.1",
     "audit": "node scripts/audit-reachability.mjs",
-    "audit:check": "node scripts/audit-reachability.mjs --check"
+    "audit:check": "node scripts/audit-reachability.mjs --check",
+    "release:check": "node scripts/check-release.mjs",
+    "questions": "python3 scripts/build_questions.py"
   },
   "engines": {
     "node": ">=22"

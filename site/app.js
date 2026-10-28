@@ -1,14 +1,16 @@
-import { ALL_QUESTIONS, FACET_LABELS } from './questions.js';
+import { editAnswer, savedIds, writeSession } from './session.js';
+import { ALL_QUESTIONS, FACET_LABELS, BANK_REVISION } from './questions.js';
 import { MAX_QUESTIONS, MAX_COUNT, configureCatalog, assessmentState, buildProfile, getNextQuestion, normalizeAnswers, optionsFor, recommend, summaryText, suggestedQuestion, topTopics, validateAnswer, validateCount } from './engine.js';
 
-const KEY = 'sonosaki-lab:adaptive-v3';
+const KEY = 'sonosaki-lab:evidence-v4';
 const main = document.querySelector('#main');
 const dialog = document.querySelector('#info-dialog');
 const dialogContent = document.querySelector('#dialog-content');
 const groups = new Set(['culture', 'expression', 'human', 'society', 'place', 'nature', 'life', 'matter', 'universe', 'logic', 'technology']);
 const hookIcons = ['spark', 'puzzle', 'book', 'leaf', 'planet', 'code', 'eye', 'brush', 'clock', 'people', 'bowl', 'city'];
+let catalogueQuery='', cataloguePage=0, dialogKind=null;
 let catalogue = null, topicMap = {}, loading = true, loadError = '', memoResults = [], toastTimer;
-const state = { keepExploring: false, migrated: false, recommendationSeed: crypto.getRandomValues(new Uint32Array(1))[0], seed: crypto.getRandomValues(new Uint32Array(1))[0], phase: 'start', count: 5, answers: [], draft: [], saved: new Set(), storage: true, countError: '' };
+const state = { bankRevision: BANK_REVISION, editing: null, keepExploring: false, migrated: false, recommendationSeed: crypto.getRandomValues(new Uint32Array(1))[0], seed: crypto.getRandomValues(new Uint32Array(1))[0], phase: 'start', count: 5, answers: [], draft: [], saved: new Set(), storage: true, countError: '' };
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const icon = (name, extra = '') => `<svg class="icon ${extra}" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
@@ -20,28 +22,32 @@ function externalLink(url, label, className = '') {
   return safe ? `<a class="${className}" href="${escape(safe)}" target="_blank" rel="noopener noreferrer">${escape(label)}<span class="sr-only">（新しいタブで開きます）</span></a>` : '';
 }
 function save() {
-  try { localStorage.setItem(KEY, JSON.stringify({ version: 3, count: state.count, seed: state.seed, recommendationSeed: state.recommendationSeed, keepExploring: state.keepExploring, answers: state.answers, saved: [...state.saved].slice(0, 100) })); }
-  catch { state.storage = false; }
+  try { state.storage = writeSession(localStorage, KEY, state, 4); } catch { state.storage=false; }
+}
+function currentQuestion() {
+  return state.editing ? ALL_QUESTIONS[state.editing.questionId] : getNextQuestion(state.answers, state.count, state.seed, state.keepExploring);
 }
 function restore() {
   try {
     let raw = localStorage.getItem(KEY);
     if (!raw) {
-      const previousRaw = localStorage.getItem('sonosaki-lab:yesno-v2');
-      if (previousRaw && previousRaw.length <= 50000) {
+      const previousRaw = localStorage.getItem('sonosaki-lab:adaptive-v3') || localStorage.getItem('sonosaki-lab:yesno-v2');
+      if (previousRaw && previousRaw.length <= 2000000) {
         const previous = JSON.parse(previousRaw);
-        if (previous.version === 2) { raw = JSON.stringify({version:3,count:previous.count,saved:previous.saved,answers:[],seed:state.seed}); state.migrated=true; }
+        if ([2,3].includes(previous.version)) { raw = JSON.stringify({version:4,count:previous.count,saved:previous.saved,answers:[],seed:state.seed}); state.migrated=true; }
       }
     }
-    if (!raw || raw.length > 50000) return;
+    if (!raw) return;
     const stored = JSON.parse(raw);
-    if (stored.version !== 3) return;
+    if (stored.version !== 4) return;
     state.keepExploring = stored.keepExploring === true;
+    state.editing = stored.editing || null;
     if (Number.isInteger(stored.recommendationSeed) && stored.recommendationSeed >= 0 && stored.recommendationSeed <= 4294967295) state.recommendationSeed = stored.recommendationSeed;
     try { state.count = validateCount(stored.count); } catch { state.count = 5; }
     state.seed = Number.isInteger(stored.seed) && stored.seed >= 0 && stored.seed <= 4294967295 ? stored.seed : state.seed;
     state.answers = Array.isArray(stored.answers) ? stored.answers.slice(0, MAX_QUESTIONS) : [];
-    if (Array.isArray(stored.saved)) state.saved = new Set(stored.saved.filter(id => typeof id === 'string' && /^[a-z0-9-]+$/.test(id)).slice(0, 100));
+    if (stored.bankRevision !== BANK_REVISION) { state.answers=[]; state.editing=null; state.migrated=true; }
+    if (Array.isArray(stored.saved)) state.saved = new Set(savedIds(stored.saved));
   } catch { state.storage = false; }
 }
 function focusHeading() {
@@ -61,13 +67,13 @@ function updateSavedCount() { document.querySelector('#saved-count').textContent
 function dataLine() {
   if (loading) return '研究テーマを読み込んでいます…';
   if (loadError) return 'データを読み込めませんでした。もう一度お試しください。';
-  return `${catalogue.stats.eligible.toLocaleString('ja-JP')}件の研究室・教員テーマから、興味に近い入口を。`;
+  return `${catalogue.stats.entries.toLocaleString('ja-JP')}件の研究紹介を収録。推薦は個別確認済みの${catalogue.stats.eligible}件が対象です。未確認の紹介は照合待ちと表示します。`;
 }
 function renderStart() {
   state.countError = '';
   state.phase = 'start';
   document.title = 'その先ラボ — 好きから、大学の研究へ。';
-  const hasHistory = state.answers.length > 0;
+  const hasHistory = state.answers.length > 0 || !!state.editing;
   main.innerHTML = `
     <section class="landing-hero">
       <div class="hero-copy">
@@ -81,9 +87,9 @@ function renderStart() {
           <p class="field-error" id="count-error" aria-live="polite"></p>
           <button class="button button-primary start-button" data-action="start" ${loading || loadError ? 'disabled' : ''}>好きの先を、探してみる ${icon('arrow')}</button>
           ${hasHistory ? `<button class="resume-button" data-action="resume">${state.answers.length}問目までの続き・結果へ</button>` : ''}
-          <p class="time-note">はい・いいえで答える / 質問数は回答に合わせて変わります</p>${state.migrated ? '<p class="migration-note">質問が新しくなりました。「気になる」は引き継ぎ、回答は最初から始めます。</p>' : ''}
+          <p class="time-note">はい・いいえで答える / 研究例を読んでから考えられます</p>${state.migrated ? '<p class="migration-note">質問が新しくなりました。「気になる」は引き継ぎ、回答は最初から始めます。</p>' : ''}
         </div>
-        <p class="data-line" role="status">${escape(dataLine())}</p>
+        <p class="data-line" role="status">${escape(dataLine())}</p><button class="text-button" data-action="catalogue">回答せずに研究紹介を読む</button>
         ${loadError ? '<button class="text-button reload-button" data-action="reload">もう一度読み込む</button>' : ''}
       </div>
       <div class="interest-board" aria-label="好きから研究へ進む例">
@@ -106,19 +112,22 @@ function renderStart() {
 
 function renderQuiz() {
   state.phase = 'quiz';
-  const question = getNextQuestion(state.answers, state.count, state.seed, state.keepExploring);
+  const question = currentQuestion();
   if (!question) return renderResults();
   const step = state.answers.length;
+  const comprehension = question.stage.startsWith('understanding');
+  const checkpoint = question.stage === 'checkpoint';
+  const captions = comprehension ? ['イメージできた', question.stage === 'understanding' ? '説明をもう少し' : '別の例へ進む'] : checkpoint ? ['もう少し見てみる','ここで区切る'] : ['ちょっと気になる','今はそうでもない'];
   const progress = assessmentState(state.answers, state.count, state.seed, state.keepExploring);
   const interests = topTopics(buildProfile(state.answers), topicMap, 4);
   document.title = `${step + 1}問目 — その先ラボ`;
   main.innerHTML = `<div class="quiz-shell binary-shell">
     <div class="quiz-progress"><button class="back-button" data-action="back">${step ? '前の質問へ' : '最初の画面へ'}</button><span>${step + 1}<small> 問目・回答に合わせて探索中</small></span></div>
     <div class="coverage-progress"><progress class="progress-track" value="${progress.coverage}" max="${progress.totalGroups}" aria-label="広い分野の確認状況"></progress><span>${progress.totalGroups}分野のうち${progress.coverage}分野の入口を確認</span></div>
-    <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、こんな「好き」から。' :  '好きの理由を、たどってみよう。'}</p><h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p>
-    <div class="binary-options" role="group" aria-labelledby="question-title">${question.options.map((item,i)=>`<button class="binary-choice ${i === 0 ? 'answer-yes' : 'answer-no'}" data-option="${item.id}" aria-pressed="${state.draft.includes(item.id)}"><span aria-hidden="true">${i === 0 ? '○' : '−'}</span><strong>${item.label}</strong><small>${i === 0 ? 'ちょっと気になる' : '今はそうでもない'}</small></button>`).join('')}</div>
+    <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、こんな「好き」から。' :  '研究の世界を、のぞいてみよう。'}</p>${question.lesson ? `<aside class="lesson-card"><span>大学では、こんな研究も。</span><h2>${escape(question.lessonTitle)}</h2><p>${escape(question.lesson)}</p>${externalLink(question.sourceURL,'研究内容の公式紹介')}</aside>` : ''}<h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p>
+    <div class="binary-options" role="group" aria-labelledby="question-title">${question.options.map((item,i)=>`<button class="binary-choice ${i === 0 ? 'answer-yes' : 'answer-no'}" data-option="${item.id}" aria-pressed="${state.draft.includes(item.id)}"><span aria-hidden="true">${i === 0 ? '○' : '−'}</span><strong>${item.label}</strong><small>${captions[i]}</small></button>`).join('')}</div>
     <p class="binary-help">今の気分で選んでね。答えを押すと次の質問に進みます。<br>「いいえ」は、向いていないという意味ではありません。</p></section>
-    <div class="quiz-bottom"><div class="current-interests">${interests.length ? `<span>いま、気になっていること</span><div>${interests.map(t=>`<span class="small-topic group-${groups.has(t.group)?t.group:'culture'}">${escape(t.label)}</span>`).join('')}</div>` : '<p>まだ「はい」がなくても大丈夫。<br>いろいろな入口をのぞいていこう。</p>'}</div><div class="adaptive-controls"><span class="binary-remaining">3種類の根拠がそろった候補：${progress.qualifiedCount}件</span><button class="button button-secondary" data-action="view-results">${progress.ready ? `${state.count}件の候補と根拠を見る` : 'いまの確認状況を見る'}</button></div></div></div>`;
+    <div class="quiz-bottom"><div class="current-interests">${interests.length ? `<span>いま、気になっていること</span><div>${interests.map(t=>`<span class="small-topic group-${groups.has(t.group)?t.group:'culture'}">${escape(t.label)}</span>`).join('')}</div>` : '<p>まだ「はい」がなくても大丈夫。<br>いろいろな入口をのぞいていこう。</p>'}</div><div class="adaptive-controls"><span class="binary-remaining">個別の3根拠がそろった候補：${progress.qualifiedCount}件</span><button class="button button-secondary" data-action="view-results">${progress.ready ? `${state.count}件の候補と根拠を見る` : 'いまの確認状況を見る'}</button></div></div></div>`;
 }
 
 function primaryTopic(lab, profile) {
@@ -135,10 +144,10 @@ function labCard(lab, index, profile) {
   return `<article class="lab-card group-${color}" data-lab-id="${lab.id}">
     <div class="lab-number"><span>${String(index + 1).padStart(2, '0')}</span></div>
     <div class="lab-body"><div class="lab-meta"><span class="lab-topic">${escape(topic?.label || '研究テーマ')}</span><span>${escape(lab.kind)}</span><span>${escape(lab.country)}</span></div><p class="lab-university">${escape(lab.university)}</p><h2>${escape(lab.name)}</h2><p class="lab-description">${escape(lab.description)}</p>
-    <div class="match-reasons"><strong>この候補につながった、3種類の回答</strong><ol>${lab.reasons.map(r=>`<li><span class="evidence-facet">${escape(FACET_LABELS[r.facet])}</span><p>「${escape(r.label)}」に、はい</p><small>${escape(topicMap[r.topicId]?.label||r.topicId)}とのつながり / ${externalLink(r.sourceURL,'分野の出典')}</small></li>`).join('')}</ol></div>
+    <div class="match-reasons"><strong>この研究とのつながりを確認した3つの理由</strong><ol>${lab.reasons.map(r=>`<li><span class="evidence-facet">${escape(FACET_LABELS[r.facet])}</span><p>「${escape(r.label)}」に、はい</p><p class="evidence-claim">研究内容との対応：${escape(r.claim)}</p><small>${externalLink(r.sourceURL,'個別の対応を確認した出典')} / ${escape(r.sourceLocator)} / ${escape(r.checkedAt)}</small></li>`).join('')}</ol></div>
     <details class="research-details"><summary>研究の紹介・成果と出典を見る</summary><div><p class="detail-label">${lab.achievementType === 'publication' ? '本や論文にまとめた成果の例' : 'どんな成果が紹介されている？'}</p><p>${lab.achievement ? escape(lab.achievement) : '具体的な成果の説明は、このデータでは未確認です。気になったら、公式ページの研究紹介やニュースを見てみよう。'}</p>${departments ? `<p class="department">掲載分野：${escape(departments)}</p>` : ''}<p class="source-links">${sourceURLs.map((url, i) => externalLink(url, i === 0 ? '紹介内容の出典' : '成果の出典')).join(' / ')}</p><p class="checked-date">掲載情報の確認日：${escape(lab.checkedAt)}。教員の所属や募集状況は変わることがあります。</p></div></details>
     <div class="lab-links">${externalLink(lab.url, '公式ページでのぞいてみる', 'official-link')}${externalLink(`https://www.google.com/search?q=${encodeURIComponent(moreQuery)}`, '同じテーマの大学も探す', 'other-university-link')}</div></div>
-    <aside class="question-sticky"><span>たとえば、こんな問い</span><p>${escape(suggestedQuestion(lab, topicMap, profile))}</p><small>研究の入口としての例です</small><button class="save-lab" data-save="${lab.id}" aria-pressed="${saved}" aria-label="${escape(lab.name)}を気になるテーマに${saved ? '保存済み' : '保存'}">${icon('heart')} ${saved ? '気になるに保存済み' : '気になるに保存'}</button></aside>
+    <aside class="question-sticky"><span>たとえば、こんな問い</span><p>${escape(suggestedQuestion(lab, topicMap, profile))}</p><small>公式の研究紹介から考える入口です。学生の活動や配属を保証しません</small><button class="save-lab" data-save="${lab.id}" aria-pressed="${saved}" aria-label="${escape(lab.name)}を気になるテーマに${saved ? '保存済み' : '保存'}">${icon('heart')} ${saved ? '気になるに保存済み' : '気になるに保存'}</button></aside>
   </article>`;
 }
 
@@ -153,12 +162,12 @@ function renderResults() {
   const progress = assessmentState(state.answers, state.count, state.seed, state.keepExploring);
   const interests = topTopics(profile, topicMap, 5);
   document.title = results.length ? `${results.length}件の研究と出会う — その先ラボ` : '研究とのつながりを確認中 — その先ラボ';
-  main.innerHTML = `<section class="results-intro"><p class="results-complete">${icon('spark')} 好きの先で、見つけたもの。</p><h1 tabindex="-1">${results.length ? '3つの理由から、<br>こんな研究へ。' : 'もう少し、<br>好きの理由を探そう。'}</h1><p>${results.length ? '気になるものがひとつあれば、それだけでいい。<br>大学でやってみたいことを想像してみよう。' : 'まだ根拠が足りないだけで、向いていないという意味ではありません。<br>別の入口をのぞいたり、回答を見直したりできます。'}</p><div class="result-interests">${interests.length ? interests.map(topic => `<span class="small-topic group-${groups.has(topic.group) ? topic.group : 'culture'}">${escape(topic.label)}</span>`).join('') : '<span class="small-topic group-culture">研究テーマとのつながりを確認中</span>'}</div>
+  main.innerHTML = `<section class="results-intro"><p class="results-complete">${icon('spark')} 好きの先で、見つけたもの。</p><h1 tabindex="-1">${results.length ? '3つの理由から、<br>こんな研究へ。' : '知った研究を、<br>次の一歩に。'}</h1><p>${results.length ? '気になるものがひとつあれば、それだけでいい。<br>大学でやってみたいことを想像してみよう。' : '推薦の条件に合わなくても、研究を知ることから始められます。<br>興味が見つからないことは、向いていないという意味ではありません。'}</p><div class="result-interests">${interests.length ? interests.map(topic => `<span class="small-topic group-${groups.has(topic.group) ? topic.group : 'culture'}">${escape(topic.label)}</span>`).join('') : '<span class="small-topic group-culture">研究テーマとのつながりを確認中</span>'}</div>
     <div class="results-tools"><div><strong id="result-count-label">${results.length}件 / 希望${state.count}件</strong><label for="result-count">件数を変える</label><select id="result-count" data-result-count>${Array.from({ length: MAX_COUNT }, (_, i) => `<option value="${i + 1}" ${state.count === i + 1 ? 'selected' : ''}>${i + 1}件</option>`).join('')}</select></div><button class="button button-secondary" data-action="memo">先生に見せるメモを保存</button></div>
-    ${results.length<state.count ? `<div class="evidence-notice" role="status"><strong>希望の${state.count}件に対し、3種類の根拠がそろった候補は${results.length}件です。</strong><p>足りない理由を作って候補を増やすことはしません。${progress.exhausted ? '用意した質問はすべて確認済みです。回答を見直すか、気になった分野を別の方法でも探してみよう。' : '質問を続けると、新しいつながりが見つかるかもしれません。'}</p></div>` : ''}
+    ${results.length<state.count ? `<div class="evidence-notice" role="status"><strong>希望の${state.count}件に対し、3種類の根拠がそろった候補は${results.length}件です。</strong><p>足りない理由を作って候補を増やすことはしません。${progress.exhausted ? '現在用意できた研究例をひと区切りまで見ました。紹介一覧や公式ページからも広げられます。' : '別の研究例を読むことも、ここで区切ることもできます。'}</p></div>` : ''}
     ${!progress.exhausted ? `<button class="button button-secondary continue-button" data-action="continue">${progress.automaticStop ? 'ほかの入口も、もう少し探す' : '質問を続けて、もう少し探す'}</button>` : ''}
-    <p class="adaptive-note">${state.answers.length}問に回答。${progress.automaticStop && !progress.exhausted ? '追加質問の情報量が仮定モデルの基準を下回りました。' : '根拠がそろった候補だけを表示しています。'}質問数の統計的な最適性は、利用者データではまだ検証していません。</p>
-    <details class="answers-details"><summary>選んだ答えを見直す</summary><ol>${state.answers.map((answer, i) => { const q = ALL_QUESTIONS[answer.questionId]; return `<li><span>${escape(q.title)}</span><strong>${answer.optionIds.map(id => q.options.find(o => o.id === id)?.label || '').map(escape).join('、')}</strong><button data-edit-step="${i}">${i + 1}問目から見直す</button></li>`; }).join('')}</ol></details>
+    <p class="adaptive-note">${state.answers.length}問に回答。${progress.completedExamples}件の研究例を確認。${progress.stopReason==='user-pause'?'あなたが選んだ区切りです。':'本人の回答と個別研究の対応がそろった候補を表示しています。'}区切りの間隔や質問数の最適性は、利用者テストで検証予定です。</p>
+    <button class="button button-secondary" data-action="catalogue">研究紹介を読む（推薦とは別の一覧）</button><details class="answers-details"><summary>選んだ答えを見直す</summary><ol>${state.answers.map((answer, i) => { const q = ALL_QUESTIONS[answer.questionId]; return `<li><span>${escape(q.title)}</span><strong>${answer.optionIds.map(id => q.options.find(o => o.id === id)?.label || '').map(escape).join('、')}</strong><button data-edit-step="${i}">${i + 1}問目から見直す</button></li>`; }).join('')}</ol></details>
     </section><section class="results-list" aria-labelledby="result-count-label">${results.map((lab, index) => labCard(lab, index, profile)).join('')}</section>
     <section class="next-step"><div class="next-step-star">${icon('spark')}</div><div><h2>「ここ、ちょっと気になる。」<br>その理由を、ひとこと残そう。</h2><p>同じテーマの大学を探す。公開講座を聞いてみる。<br>先生や家族に、このメモを見せてみる。小さな次の一歩でOK。</p><div><button class="button button-primary" data-action="memo">結果をメモにする</button><button class="text-button" data-action="restart">別の「好き」でもう一度</button></div></div></section>
     <p class="results-footnote">ここにあるのは、大学の研究を知るための見本です。研究室のほか、教室・教員の研究テーマや研究センターを含みます。学部の授業や配属、入試は各大学の公式案内も確かめてみてね。</p>`;
@@ -169,26 +178,31 @@ function render() {
   if (state.phase === 'quiz') renderQuiz();
   else if (state.phase === 'results') renderResults();
   else renderStart();
+  if (!state.storage) main.insertAdjacentHTML('afterbegin','<p class="evidence-notice" role="status">ブラウザーに保存できていません。この画面では使えますが、閉じると変更が失われる場合があります。</p>');
 }
 function chooseOption(id) {
-  const question = getNextQuestion(state.answers, state.count, state.seed, state.keepExploring);
+  const question = currentQuestion();
   if (!question || !optionsFor(question).some(option => option.id === id)) return;
   state.draft = [id];
   advance();
 }
 function advance() {
-  const question = getNextQuestion(state.answers, state.count, state.seed, state.keepExploring);
+  const question = currentQuestion();
   const ids = state.draft;
   if (!question || !validateAnswer(question, ids)) return;
-  state.answers.push({ questionId: question.id, optionIds: [...ids], targetCount: state.count, continued: state.keepExploring });
+  state.answers.push({ questionId: question.id, optionIds: [...ids], targetCount: state.editing?.targetCount ?? state.count, continued: state.editing?.continued ?? state.keepExploring });
+  state.editing = null;
+  state.keepExploring = false;
   state.draft = [];
   state.phase = getNextQuestion(state.answers,state.count,state.seed,state.keepExploring) ? 'quiz' : 'results';
   save(); render(); focusHeading();
 }
 function editStep(step) {
   if (!Number.isInteger(step) || step < 0 || step >= state.answers.length) return;
-  state.draft = [...state.answers[step].optionIds];
-  state.answers = state.answers.slice(0, step);
+  const edit = editAnswer(state.answers, step);
+  state.draft = [...edit.editing.optionIds];
+  state.answers = edit.answers;
+  state.editing = edit.editing;
   state.phase = 'quiz'; save(); render(); focusHeading();
 }
 function toggleSaved(id) {
@@ -203,19 +217,35 @@ function toggleSaved(id) {
     button.setAttribute('aria-label', `${lab.name}を気になるテーマに${!isSaved ? '保存済み' : '保存'}`);
     button.innerHTML = icon('heart') + (!isSaved ? ' 気になるに保存済み' : ' 気になるに保存');
   });
-  notify(isSaved ? '気になるから外しました' : state.storage ? 'このブラウザーの「気になる」に保存しました' : 'この画面の「気になる」に保存しました');
+  if (dialog.open && dialogKind==='saved') showSaved();
+  else if (dialog.open && dialogKind==='catalogue') showCatalogue();
+  if (dialog.open) (dialogContent.querySelector(`[data-save="${id}"]`) || dialogContent.querySelector('[data-save]') || dialog.querySelector('[data-action="close-dialog"]'))?.focus();
+  notify(!state.storage ? 'ブラウザーへの保存に失敗しました。変更はこの画面内だけで保持しています' : isSaved ? '気になるから外しました' : 'このブラウザーの「気になる」に保存しました');
 }
 function showDialog(content) {
   dialogContent.innerHTML = content;
   if (!dialog.open) dialog.showModal();
 }
 function showAbout() {
-  showDialog(`<span class="dialog-symbol">${icon('spark')}</span><h2 id="dialog-title">好きの先を、のぞくために。</h2><p>その先ラボは、志望校がまだ決まっていない高校生が、大学でどんなことを研究できるか知るためのツールです。</p><h3>質問から、何を探しているの？</h3><p>好きなもの、その理由、やってみたい調べ方と近い研究テーマを紹介します。質問はすべて「はい／いいえ」で答えます。固定20問を廃止し、回答に応じて追加します。「いいえ」は今の関心として扱い、能力の否定や分野の完全除外には使いません。向き不向きや合格の可能性を決めるテストではありません。</p><h3>紹介しているデータ</h3><p>東京大学の公式一覧をもとに作った2,988行のCSVを使い、重複などを整理しています。研究内容を説明できる東大のテーマと、国内外の${catalogue?.stats.additionalUniversities || 4}大学の研究を合わせた${catalogue?.stats.eligible.toLocaleString('ja-JP') || '—'}件を候補にしています。</p><p>教員の研究テーマや研究センターは、その種類を表示しています。希望する数は1〜20件で選べます。「気になるテーマ・知りたい問い・やってみたい取り組み」の3種類の回答根拠がそろう候補を、希望数まで紹介します。足りない場合は追加質問へ進めます。</p><h3>公平さと質問数</h3><p>すべての候補を同じルール・同じ事前重みで扱います。分野への到達経路を全件検査し、同条件の候補はセッションごとの抽選で順番を決めます。大学名・CSV順・教員名で優先しません。興味が異なる人どうしでも全研究室の表示回数が同じになる保証ではありません。</p><p>質問は、仮定モデル上の期待情報量と足りない回答根拠をもとに選びます。これは未校正の試作モデルです。最適な質問数や一致率を実証したものではなく、3つの根拠も統計的に独立な測定値という意味ではありません。</p><p>到達経路を確認できたのは推薦対象の2,562件です。説明・分野などの確認が足りない264件は対象外として区別しています。<a href="${escape(new URL('data/reachability-audit.json', import.meta.url).href)}" target="_blank" rel="noopener noreferrer">全件の合成検査記録（JSON）</a></p><h3>説明と成果について</h3><p>研究分野を分かりやすく言い換えた説明を含みます。「たとえば、こんな問い」は研究に興味を持つための例で、その研究室が今まさに取り組んでいる課題とは限りません。</p><p>成果は出典を確認できたものだけを紹介しています。未確認は、成果がないという意味ではありません。同じ教員の別の所属で紹介された成果を含む場合もあります。</p><p>情報の確認日：${escape(catalogue?.checkedAt || '2026-10-28')}。所属・研究内容・募集状況は変わることがあります。</p><h3>大学選びにつなげるには</h3><p>東大は、幅広い研究を知るための出発点です。同じテーマを研究するほかの大学や、学部の授業、入試の公式案内にも広げてみてください。</p><h3>回答の保存</h3><p>回答と「気になる」は、保存が使える場合、このブラウザー内にだけ残ります。アカウント登録や、回答の外部送信はありません。</p>`);
+  dialogKind='about';
+  showDialog(`<h2 id="dialog-title">研究を知って、関心を探すために。</h2><p>質問ははい／いいえ。研究例を読んで内容をイメージできたか確認してから、対象・問い・取り組みへの関心を尋ねます。理解確認のいいえを、興味がないという意味には使いません。</p><h3>推薦と研究紹介の違い</h3><p>推薦は、異なる3つの肯定回答と、その研究室の公式内容との対応を確認できる場合だけ行います。タグや大学名だけで根拠を作りません。希望1〜20件に満たない場合は実数を表示します。</p><p>紹介一覧には全${catalogue?.stats.entries||0}件を残しています。個別根拠の確認済みは${catalogue?.stats.eligible||0}件、未確認は${catalogue?.stats.pendingReview||0}件です。推薦するのは個別確認済みの研究だけです。未確認の項目は照合待ちと表示し、推薦には使いません。</p><h3>質問数と公平さ</h3><p>全11分野の入口を見た後、関心に近い研究例から読めます。どの分野もいいえだけで完全除外しません。3例ごとに続行するか選べます。この間隔は仮の運用値で、統計的な最適値ではありません。同じ条件の候補は抽選し、希望に応じて違う分野を先に並べます。</p><p>全候補の到達・根拠の形式を機械検査しますが、意味の正しさは個別資料で別に確認します。実利用時の表示回数を等しくする保証はありません。</p><h3>保存と出典</h3><p>回答と気になるはこのブラウザー内だけに保存します。外部送信・解析タグはありません。保存ができない場合は通知します。過去版の回答は新しい質問に使い回さず、保存候補だけ引き継ぎます。</p><p>研究内容の出典箇所と確認日を各理由に示します。研究例は学生の活動・配属・募集を保証するものではありません。成果が未確認の場合は成果なしと断定しません。</p>`);
 }
 function showSaved() {
+  dialogKind="saved";
   const labs = catalogue?.labs.filter(lab => state.saved.has(lab.id)) || [];
-  showDialog(`<h2 id="dialog-title">あなたの「気になる」</h2>${labs.length ? `<p>あとで公式ページをのぞいたり、だれかに話してみたり。</p><ul class="saved-list">${labs.map(lab => `<li><span>${escape(lab.university)}</span>${externalLink(lab.url, lab.name)}<p>${escape(lab.description)}</p></li>`).join('')}</ul>` : '<p>結果の「気になるに保存」を押すと、ここに残せます。小さな興味を、集めてみよう。</p>'}`);
+  showDialog(`<h2 id="dialog-title">あなたの「気になる」</h2>${labs.length ? `<p>あとで公式ページをのぞいたり、だれかに話してみたり。</p><ul class="saved-list">${labs.map(lab => `<li><span>${escape(lab.university)} / ${lab.eligible?'個別の対応確認済み':'旧データの説明（個別照合待ち）'}</span>${externalLink(lab.url, lab.name)}<p>${escape(lab.description)}</p><button class="text-button" data-save="${lab.id}">気になるから外す</button></li>`).join('')}</ul>` : '<p>結果の「気になるに保存」を押すと、ここに残せます。小さな興味を、集めてみよう。</p>'}`);
 }
+
+function showCatalogue() {
+  dialogKind='catalogue';
+  const query=catalogueQuery.trim().toLocaleLowerCase();
+  const labs=(catalogue?.labs||[]).filter(lab=>[lab.name,lab.university,...lab.faculty,...lab.departments].join(' ').toLocaleLowerCase().includes(query));
+  const pageCount=Math.max(1,Math.ceil(labs.length/30));
+  cataloguePage=Math.min(cataloguePage,pageCount-1);
+  const page=labs.slice(cataloguePage*30,(cataloguePage+1)*30);
+  showDialog(`<h2 id="dialog-title">研究紹介を、自由に読む</h2><p>推薦結果とは別の一覧です。未確認の紹介文は、個別研究の根拠として使用しません。</p><label for="catalogue-search">大学・研究室・学部名で探す</label><input id="catalogue-search" data-catalogue-search value="${escape(catalogueQuery)}" type="search"><p role="status">${labs.length}件 / ${cataloguePage+1}ページ目（全${pageCount}ページ）</p><ul class="saved-list">${page.map(lab=>`<li><span>${escape(lab.university)} / ${lab.eligible?'個別の対応確認済み':'個別照合待ち'}</span>${externalLink(lab.url,lab.name)}<p>${escape(lab.description)}</p>${!lab.eligible?`<small>旧データの説明（個別照合待ち）。次の確認：${escape(lab.review.nextAction)}</small>`:''}<button class="text-button" data-save="${lab.id}" aria-pressed="${state.saved.has(lab.id)}">${state.saved.has(lab.id)?'気になるから外す':'気になるに保存'}</button></li>`).join('')}</ul><div class="catalogue-pages"><button data-action="catalogue-prev" ${cataloguePage===0?'disabled':''}>前のページ</button><button data-action="catalogue-next" ${cataloguePage+1>=pageCount?'disabled':''}>次のページ</button></div>`);
+}
+
 function downloadMemo() {
   if (!catalogue) return;
   const content = '\ufeff' + summaryText(memoResults, state.answers, topicMap);
@@ -237,13 +267,16 @@ document.addEventListener('click', event => {
   }
   switch (target.dataset.action) {
     case 'home': state.phase = 'start'; state.draft = []; render(); focusHeading(); break;
-    case 'start': if (!catalogue || state.countError) break; state.keepExploring=false; state.migrated=false; state.seed = crypto.getRandomValues(new Uint32Array(1))[0]; state.recommendationSeed = crypto.getRandomValues(new Uint32Array(1))[0]; state.answers = []; state.draft = []; state.phase = 'quiz'; save(); render(); focusHeading(); break;
-    case 'resume': if (!catalogue) break; state.draft = []; state.phase = getNextQuestion(state.answers,state.count,state.seed,state.keepExploring) ? 'quiz' : 'results'; render(); focusHeading(); break;
+    case 'start': if (!catalogue || state.countError) break; state.editing=null; state.keepExploring=false; state.migrated=false; state.seed = crypto.getRandomValues(new Uint32Array(1))[0]; state.recommendationSeed = crypto.getRandomValues(new Uint32Array(1))[0]; state.answers = []; state.draft = []; state.phase = 'quiz'; save(); render(); focusHeading(); break;
+    case 'resume': if (!catalogue) break; state.draft = state.editing ? [...state.editing.optionIds] : []; state.phase = currentQuestion() ? 'quiz' : 'results'; render(); focusHeading(); break;
     case 'view-results': state.phase='results'; render(); focusHeading(); break;
     case 'continue': if (!catalogue) break; if (assessmentState(state.answers,state.count,state.seed,state.keepExploring).automaticStop) state.keepExploring=true; state.phase='quiz'; save(); render(); focusHeading(); break;
-    case 'restart': state.keepExploring=false; state.answers = []; state.draft = []; state.phase = 'start'; save(); render(); focusHeading(); break;
+    case 'restart': state.editing=null; state.keepExploring=false; state.answers = []; state.draft = []; state.phase = 'start'; save(); render(); focusHeading(); break;
     case 'back': if (!state.answers.length) { state.phase = 'start'; render(); focusHeading(); } else editStep(state.answers.length - 1); break;
     case 'about': showAbout(); break;
+    case 'catalogue': catalogueQuery=''; cataloguePage=0; showCatalogue(); break;
+    case 'catalogue-prev': cataloguePage=Math.max(0,cataloguePage-1); showCatalogue(); break;
+    case 'catalogue-next': cataloguePage++; showCatalogue(); break;
     case 'saved': showSaved(); break;
     case 'close-dialog': dialog.close(); break;
     case 'memo': downloadMemo(); break;
@@ -251,6 +284,7 @@ document.addEventListener('click', event => {
   }
 });
 document.addEventListener('input', event => {
+  if (event.target.matches('[data-catalogue-search]')) { const caret=event.target.selectionStart; catalogueQuery=event.target.value; cataloguePage=0; showCatalogue(); const input=dialogContent.querySelector('[data-catalogue-search]'); input.focus(); input.setSelectionRange(caret,caret); return; }
   if (!event.target.matches('[data-start-count]')) return;
   const input = event.target;
   try { state.count = validateCount(input.value); state.countError = ''; save(); }
@@ -275,8 +309,12 @@ async function loadData() {
     const responses = await Promise.all(['data/catalog.json', 'data/topics.json'].map(path => fetch(new URL(path, import.meta.url), { signal: controller.signal })));
     if (responses.some(response => !response.ok)) throw new Error('Data request failed');
     const [data, topics] = await Promise.all(responses.map(response => response.json()));
-    if (data.schemaVersion !== 1 || !Array.isArray(data.labs) || data.labs.filter(lab => lab.eligible).length < MAX_COUNT) throw new Error('Incomplete catalogue');
+    if (data.schemaVersion !== 2 || !Array.isArray(data.labs)) throw new Error('Incomplete catalogue');
     catalogue = data; configureCatalog(catalogue.labs); state.answers = normalizeAnswers(state.answers,state.count,state.seed); topicMap = Object.fromEntries(topics.map(topic => [topic.id, topic]));
+    if (state.editing) {
+      const expected = getNextQuestion(state.answers,state.editing.targetCount ?? state.count,state.seed,state.editing.continued === true);
+      if (expected?.id !== state.editing.questionId) state.editing=null;
+    }
     const ids = new Set(catalogue.labs.map(lab => lab.id)); state.saved = new Set([...state.saved].filter(id => ids.has(id)));
   } catch { loadError = '研究テーマを読み込めませんでした'; }
   finally { clearTimeout(timeout); loading = false; render(); }
