@@ -126,3 +126,15 @@ test('Every topic profile and mixed binary path can finish and generate a useful
   assert.deepEqual(normalizeAnswers(answers),answers);
  }
 });
+
+test('Every yes answer also completes twenty distinct binary questions',()=>{
+ const answers=[];
+ for(let i=0;i<FLOW.length;i++) {
+  const q=getNextQuestion(answers);
+  answers.push({questionId:q.id,optionIds:[`${q.id}_yes`]});
+ }
+ assert.equal(getNextQuestion(answers),null);
+ assert.equal(new Set(answers.map(a=>a.questionId)).size,20);
+ assert.deepEqual(normalizeAnswers(answers),answers);
+ assert.equal(recommend(catalogue.labs,answers,20).length,20);
+});
