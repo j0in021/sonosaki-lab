@@ -62,24 +62,24 @@ test('All reviewed records have a legal positive path, without counting broad or
   for(const e of r[0].reasons){assert.equal(ALL_QUESTIONS[e.questionId].stage,'evidence');assert(a.some(x=>x.questionId===e.questionId&&x.optionIds[0]===e.questionId+'_yes'));}
  }
 });
-test('Understanding no provides a simpler explanation; repeated no never creates a preference penalty or reason',()=>{
- configureCatalog(catalog.labs);const a=[];
- while(getNextQuestion(a,5,123).stage!=='understanding'){const q=getNextQuestion(a,5,123);a.push(yes(q,false));}
- const q=getNextQuestion(a,5,123);a.push(yes(q,false));const retry=getNextQuestion(a,5,123);
- assert.equal(retry.stage,'understanding-retry');assert.equal(retry.labId,q.labId);assert.notEqual(retry.lesson,q.lesson);
- a.push(yes(retry,false));assert.notEqual(getNextQuestion(a,5,123).labId,q.labId);
- assert.equal(buildProfile(a).traces.length,0);assert.equal(recommend(catalog.labs,a,5).length,0);
+test('An everyday yes immediately opens a related individual question; no explores another doorway',()=>{
+ configureCatalog(catalog.labs);
+ const first=getNextQuestion([],5,123);assert.equal(first.stage,'broad');
+ const follow=getNextQuestion([yes(first,true)],5,123);
+ assert.equal(follow.stage,'evidence');assert.equal(follow.group,first.group);assert.equal(follow.facet,'interest');
+ assert.equal(getNextQuestion([yes(first,false)],5,123).stage,'broad');
+ assert(!QUESTION_BANK.some(q=>q.stage.startsWith('understanding')));
 });
-test('Every study asks understanding, interest, inquiry, activity in order; missing yes cannot be padded',()=>{
+test('Every study asks interest, inquiry, activity in order; missing yes cannot be padded',()=>{
  const a=journey(()=>true,20,123,true);
- for(const lab of catalog.labs.filter(l=>l.eligible))assert.deepEqual(a.filter(x=>ALL_QUESTIONS[x.questionId].labId===lab.id).map(x=>ALL_QUESTIONS[x.questionId].facet||'understand'),['understand',...FACETS]);
+ for(const lab of catalog.labs.filter(l=>l.eligible))assert.deepEqual(a.filter(x=>ALL_QUESTIONS[x.questionId].labId===lab.id).map(x=>ALL_QUESTIONS[x.questionId].facet||'understand'),FACETS);
  assert.deepEqual(normalizeAnswers(a,20,123),a);
  assert.equal(assessmentState(a,20,123).stopReason,'examples-exhausted');
  const r=recommend(catalog.labs,a,20);assert.equal(r.length,Math.min(20,catalog.stats.eligible));
  for(const lab of r)assert.equal(new Set(lab.reasons.map(e=>e.semanticKey)).size,3);
 });
 test('No-interest and theme-only paths reach an explicit pause after three examples, rather than 155 questions',()=>{
- for(const choose of [()=>false,q=>q.stage.startsWith('understanding')||q.facet==='interest'||q.stage==='broad']){
+ for(const choose of [()=>false,q=>q.facet==='interest'||q.stage==='broad']){
   const a=journey(choose,5);const s=assessmentState(a,5,123);
   assert.equal(s.stopReason,'user-pause');assert.equal(s.completedExamples,3);assert(a.length<=22);assert.equal(recommend(catalog.labs,a,5).length,0);
  }
@@ -87,7 +87,7 @@ test('No-interest and theme-only paths reach an explicit pause after three examp
 test('User can resume a pause, and the resumption plus all following answers replay',()=>{
  const a=journey(()=>false,5);const q=getNextQuestion(a,5,123,true);assert(q);a.push(yes(q,true,5,true));
  assert.deepEqual(normalizeAnswers(a,5,123),a);
- const next=getNextQuestion(a,5,123);assert.equal(next.facet,'interest');
+ const next=getNextQuestion(a,5,123);assert.equal(next.facet,'inquiry');
 });
 test('Requested counts, same-condition shuffle, input-order invariance, and diversity retain grounded candidates',()=>{
  const a=journey(q=>q.id!=='compare_breadth',20,123,true),available=catalog.stats.eligible;

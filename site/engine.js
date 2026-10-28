@@ -26,19 +26,18 @@ export function configureCatalog(labs){
  return {eligible:eligible.length};
 }
 export function buildProfile(answers=[]){
- const topics=Object.create(null),traces=[],understood=new Set();
+ const topics=Object.create(null),traces=[];
  for(const a of answers){const q=ALL_QUESTIONS[a.questionId];if(!validateAnswer(q,a.optionIds)||!positive(a))continue;
-  if(q.stage==='understanding'||q.stage==='understanding-retry')understood.add(q.labId);
-  if(q.stage==='evidence'&&understood.has(q.labId)){
+  if(q.stage==='evidence'){
    for(const t of q.topics)topics[t]=(topics[t]||0)+1;
    traces.push({questionId:q.id,label:q.title,topics:q.topics,facet:q.facet,labId:q.labId});
   }
  }
- return {topics,traces,understood};
+ return {topics,traces};
 }
 export function topTopics(profile,map,limit=5){return Object.entries(profile.topics).filter(([id])=>map[id]).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,limit).map(([id])=>map[id]);}
 export function reasonsFor(profile,lab){
- if(!hasVerifiedEvidence(lab)||!profile.understood.has(lab.id))return [];
+ if(!hasVerifiedEvidence(lab))return [];
  return FACETS.flatMap(facet=>{
   const evidence=lab.evidence.find(e=>e.facet===facet);
   const trace=profile.traces.find(t=>t.labId===lab.id&&t.questionId===evidence.questionId);
@@ -49,13 +48,8 @@ export function qualifiedLabs(labs,answers){const p=buildProfile(answers);return
 function distinctResearchers(labs){return new Set(labs.map(l=>l.leadResearcherKey||l.id)).size;}
 function studyState(lab,answered){
  const seen=id=>answered.get(lab.id+'_'+id);
- if(!seen('understand'))return {started:false,next:ALL_QUESTIONS[lab.id+'_understand']};
- if(!positive(seen('understand'))){
-  if(!seen('explain'))return {started:true,next:ALL_QUESTIONS[lab.id+'_explain']};
-  if(!positive(seen('explain')))return {started:true,complete:true};
- }
  for(const facet of FACETS){
-  if(!seen(facet))return {started:true,next:ALL_QUESTIONS[lab.id+'_'+facet]};
+  if(!seen(facet))return {started:facet!=='interest',next:ALL_QUESTIONS[lab.id+'_'+facet]};
   if(!positive(seen(facet)))return {started:true,complete:true};
  }
  return {started:true,complete:true};
@@ -64,7 +58,7 @@ export function assessmentState(answers=[],count=5,seed=0,continueAfterStop=fals
  validateCount(count);if(!context)throw new Error('研究データの準備ができていません。');
  const answered=new Map(answers.map(a=>[a.questionId,a]));
  const broad=QUESTION_BANK.filter(q=>q.stage==='broad');
- const remainingBroad=shuffled(broad,seed).filter(q=>!answered.has(q.id));
+ const remainingBroad=broad.filter(q=>!answered.has(q.id));
  const states=context.eligible.map(lab=>({lab,...studyState(lab,answered)}));
  const completed=states.filter(s=>s.complete).length;
  const qualifiedCount=distinctResearchers(qualifiedLabs(context.eligible,answers));
@@ -72,8 +66,6 @@ export function assessmentState(answers=[],count=5,seed=0,continueAfterStop=fals
   qualifiedCount,requestedCount:count,ready:qualifiedCount>=count,completedExamples:completed,totalExamples:states.length,exhausted:false,automaticStop:false,stopReason:null};
  const next=q=>({...common,next:q});
  const stop=reason=>({...common,next:null,automaticStop:true,exhausted:reason==='examples-exhausted',stopReason:reason});
- if(remainingBroad.length)return next(remainingBroad[0]);
- if(!answered.has('compare_breadth'))return next(ALL_QUESTIONS.compare_breadth);
  const active=states.find(s=>s.started&&!s.complete);
  if(active)return next(active.next);
  if(completed===states.length)return stop('examples-exhausted');
@@ -83,6 +75,9 @@ export function assessmentState(answers=[],count=5,seed=0,continueAfterStop=fals
   if(!answered.has(id))return next(ALL_QUESTIONS[id]);
   if(!positive(answered.get(id))&&!continueAfterStop)return stop('user-pause');
  }
+ const last=answers.at(-1),lastQuestion=ALL_QUESTIONS[last?.questionId];
+ // A yes opens a related study immediately; a completed study opens another everyday interest.
+ if(remainingBroad.length&&(!last||lastQuestion?.stage!=='broad'||!positive(last)))return next(remainingBroad[0]);
  const positiveGroups=new Set(broad.filter(q=>positive(answered.get(q.id))).map(q=>q.group));
  const candidates=shuffled(states.filter(s=>!s.started),seed^completed);
  // Broad interests order examples, never fabricate reasons or exclude another field.
@@ -105,10 +100,6 @@ export function recommend(labs,answers,requestedCount,seed=0){
  const count=validateCount(requestedCount);if(context?.labs!==labs)configureCatalog(labs);
  const profile=buildProfile(answers);
  let candidates=shuffled(qualifiedLabs(labs,answers).sort((a,b)=>a.id.localeCompare(b.id)),seed);
- if(answers.some(a=>a.questionId==='compare_breadth'&&positive(a))){
-  const buckets=new Map();for(const lab of candidates){const key=lab.lesson.group;if(!buckets.has(key))buckets.set(key,[]);buckets.get(key).push(lab);}
-  candidates=[];while([...buckets.values()].some(b=>b.length))for(const bucket of buckets.values())if(bucket.length)candidates.push(bucket.shift());
- }
  const selected=[],researchers=new Set();
  for(const lab of candidates){const key=lab.leadResearcherKey||lab.id;if(researchers.has(key))continue;researchers.add(key);selected.push({...lab,reasons:reasonsFor(profile,lab)});if(selected.length===count)break;}
  return selected;

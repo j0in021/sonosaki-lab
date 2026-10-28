@@ -87,7 +87,7 @@ function renderStart() {
           <p class="field-error" id="count-error" aria-live="polite"></p>
           <button class="button button-primary start-button" data-action="start" ${loading || loadError ? 'disabled' : ''}>好きの先を、探してみる ${icon('arrow')}</button>
           ${hasHistory ? `<button class="resume-button" data-action="resume">${state.answers.length}問目までの続き・結果へ</button>` : ''}
-          <p class="time-note">はい・いいえで答える / 研究例を読んでから考えられます</p>${state.migrated ? '<p class="migration-note">質問が新しくなりました。「気になる」は引き継ぎ、回答は最初から始めます。</p>' : ''}
+          <p class="time-note">はい・いいえで答える / 好きから少しずつ深掘りします</p>${state.migrated ? '<p class="migration-note">質問が新しくなりました。「気になる」は引き継ぎ、回答は最初から始めます。</p>' : ''}
         </div>
         <p class="data-line" role="status">${escape(dataLine())}</p><button class="text-button" data-action="catalogue">回答せずに研究紹介を読む</button>
         ${loadError ? '<button class="text-button reload-button" data-action="reload">もう一度読み込む</button>' : ''}
@@ -115,16 +115,15 @@ function renderQuiz() {
   const question = currentQuestion();
   if (!question) return renderResults();
   const step = state.answers.length;
-  const comprehension = question.stage.startsWith('understanding');
   const checkpoint = question.stage === 'checkpoint';
-  const captions = comprehension ? ['イメージできた', question.stage === 'understanding' ? '説明をもう少し' : '別の例へ進む'] : checkpoint ? ['もう少し見てみる','ここで区切る'] : ['ちょっと気になる','今はそうでもない'];
+  const captions = checkpoint ? ['もう少し見てみる','ここで区切る'] : ['ちょっと気になる','今はそうでもない'];
   const progress = assessmentState(state.answers, state.count, state.seed, state.keepExploring);
   const interests = topTopics(buildProfile(state.answers), topicMap, 4);
   document.title = `${step + 1}問目 — その先ラボ`;
   main.innerHTML = `<div class="quiz-shell binary-shell">
     <div class="quiz-progress"><button class="back-button" data-action="back">${step ? '前の質問へ' : '最初の画面へ'}</button><span>${step + 1}<small> 問目・回答に合わせて探索中</small></span></div>
-    <div class="coverage-progress"><progress class="progress-track" value="${progress.coverage}" max="${progress.totalGroups}" aria-label="広い分野の確認状況"></progress><span>${progress.totalGroups}分野のうち${progress.coverage}分野の入口を確認</span></div>
-    <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、こんな「好き」から。' :  '研究の世界を、のぞいてみよう。'}</p>${question.lesson ? `<aside class="lesson-card"><span>大学では、こんな研究も。</span><h2>${escape(question.lessonTitle)}</h2><p>${escape(question.lesson)}</p>${externalLink(question.sourceURL,'研究内容の公式紹介')}</aside>` : ''}<h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p>
+    <div class="coverage-progress"><span>「好き」から、少しずつ深掘り。 ${progress.completedExamples ? `${progress.completedExamples}件の研究につながる質問を探索` : '気になるものを選んでみよう'}</span></div>
+    <section class="question-section" aria-labelledby="question-title"><p class="question-stage">${step === 0 ? 'まずは、こんな「好き」から。' :  '研究の世界を、のぞいてみよう。'}</p><h1 id="question-title" tabindex="-1">${escape(question.title)}</h1><p class="question-note">${escape(question.note)}</p>${question.lesson ? `<details class="lesson-card"><summary>研究のヒントを見る</summary><h2>${escape(question.lessonTitle)}</h2><p>${escape(question.lesson)}</p><p>${escape(catalogue.labs.find(l=>l.id===question.labId)?.lesson?.simplerExplanation||'')}</p>${externalLink(question.sourceURL,'研究内容の公式紹介')}</details>` : ''}
     <div class="binary-options" role="group" aria-labelledby="question-title">${question.options.map((item,i)=>`<button class="binary-choice ${i === 0 ? 'answer-yes' : 'answer-no'}" data-option="${item.id}" aria-pressed="${state.draft.includes(item.id)}"><span aria-hidden="true">${i === 0 ? '○' : '−'}</span><strong>${item.label}</strong><small>${captions[i]}</small></button>`).join('')}</div>
     <p class="binary-help">今の気分で選んでね。答えを押すと次の質問に進みます。<br>「いいえ」は、向いていないという意味ではありません。</p></section>
     <div class="quiz-bottom"><div class="current-interests">${interests.length ? `<span>いま、気になっていること</span><div>${interests.map(t=>`<span class="small-topic group-${groups.has(t.group)?t.group:'culture'}">${escape(t.label)}</span>`).join('')}</div>` : '<p>まだ「はい」がなくても大丈夫。<br>いろいろな入口をのぞいていこう。</p>'}</div><div class="adaptive-controls"><span class="binary-remaining">個別の3根拠がそろった候補：${progress.qualifiedCount}件</span><button class="button button-secondary" data-action="view-results">${progress.ready ? `${state.count}件の候補と根拠を見る` : 'いまの確認状況を見る'}</button></div></div></div>`;
@@ -228,7 +227,7 @@ function showDialog(content) {
 }
 function showAbout() {
   dialogKind='about';
-  showDialog(`<h2 id="dialog-title">研究を知って、関心を探すために。</h2><p>質問ははい／いいえ。研究例を読んで内容をイメージできたか確認してから、対象・問い・取り組みへの関心を尋ねます。理解確認のいいえを、興味がないという意味には使いません。</p><h3>推薦と研究紹介の違い</h3><p>推薦は、異なる3つの肯定回答と、その研究室の公式内容との対応を確認できる場合だけ行います。タグや大学名だけで根拠を作りません。希望1〜20件に満たない場合は実数を表示します。</p><p>紹介一覧には全${catalogue?.stats.entries||0}件を残しています。個別根拠の確認済みは${catalogue?.stats.eligible||0}件、未確認は${catalogue?.stats.pendingReview||0}件です。推薦するのは個別確認済みの研究だけです。未確認の項目は照合待ちと表示し、推薦には使いません。</p><h3>質問数と公平さ</h3><p>全11分野の入口を見た後、関心に近い研究例から読めます。どの分野もいいえだけで完全除外しません。3例ごとに続行するか選べます。この間隔は仮の運用値で、統計的な最適値ではありません。同じ条件の候補は抽選し、希望に応じて違う分野を先に並べます。</p><p>全候補の到達・根拠の形式を機械検査しますが、意味の正しさは個別資料で別に確認します。実利用時の表示回数を等しくする保証はありません。</p><h3>保存と出典</h3><p>回答と気になるはこのブラウザー内だけに保存します。外部送信・解析タグはありません。保存ができない場合は通知します。過去版の回答は新しい質問に使い回さず、保存候補だけ引き継ぎます。</p><p>研究内容の出典箇所と確認日を各理由に示します。研究例は学生の活動・配属・募集を保証するものではありません。成果が未確認の場合は成果なしと断定しません。</p>`);
+  showDialog(`<h2 id="dialog-title">研究を知って、関心を探すために。</h2><p>質問ははい／いいえ。身近な「好き」から、気になる対象・問い・取り組みへ少しずつ進みます。説明は「研究のヒント」を開いて読めます。「いいえ」は向いていないという意味ではありません。</p><h3>推薦と研究紹介の違い</h3><p>推薦は、異なる3つの肯定回答と、その研究室の公式内容との対応を確認できる場合だけ行います。タグや大学名だけで根拠を作りません。希望1〜20件に満たない場合は実数を表示します。</p><p>紹介一覧には全${catalogue?.stats.entries||0}件を残しています。個別根拠の確認済みは${catalogue?.stats.eligible||0}件、未確認は${catalogue?.stats.pendingReview||0}件です。推薦するのは個別確認済みの研究だけです。未確認の項目は照合待ちと表示し、推薦には使いません。</p><h3>質問数と公平さ</h3><p>全11分野の入口を見た後、関心に近い研究例から読めます。どの分野もいいえだけで完全除外しません。3例ごとに続行するか選べます。この間隔は仮の運用値で、統計的な最適値ではありません。同じ条件の候補は抽選し、希望に応じて違う分野を先に並べます。</p><p>全候補の到達・根拠の形式を機械検査しますが、意味の正しさは個別資料で別に確認します。実利用時の表示回数を等しくする保証はありません。</p><h3>保存と出典</h3><p>回答と気になるはこのブラウザー内だけに保存します。外部送信・解析タグはありません。保存ができない場合は通知します。過去版の回答は新しい質問に使い回さず、保存候補だけ引き継ぎます。</p><p>研究内容の出典箇所と確認日を各理由に示します。研究例は学生の活動・配属・募集を保証するものではありません。成果が未確認の場合は成果なしと断定しません。</p>`);
 }
 function showSaved() {
   dialogKind="saved";
