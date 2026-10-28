@@ -8,7 +8,7 @@ const html = await readFile(resolve(site,'index.html'),'utf8');
 assert.match(html, /lang="ja"/);
 assert.match(html, /name="viewport"/);
 for(const match of html.matchAll(/(?:src|href)="\.\/([^"#]+)"/g)) await access(resolve(site,match[1]));
-for(const file of ['app.js','questions.js','engine.js']) {
+for(const file of ['app.js','questions.js','question-bank.js','engine.js']) {
  const result=spawnSync(process.execPath,['--check',resolve(site,file)],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 }
