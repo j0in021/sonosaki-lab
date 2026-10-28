@@ -22,8 +22,8 @@ export function hasVerifiedEvidence(lab){
 }
 export function configureCatalog(labs){
  const eligible=labs.filter(hasVerifiedEvidence).sort((a,b)=>a.id.localeCompare(b.id));
- context={labs,eligible,byId:new Map(eligible.map(l=>[l.id,l]))};
- return {eligible:eligible.length,profiles:eligible.length};
+ context={labs,eligible};
+ return {eligible:eligible.length};
 }
 export function buildProfile(answers=[]){
  const topics=Object.create(null),traces=[],understood=new Set();
@@ -34,7 +34,7 @@ export function buildProfile(answers=[]){
    traces.push({questionId:q.id,label:q.title,topics:q.topics,facet:q.facet,labId:q.labId});
   }
  }
- return {topics,traces,understood,hasTopicSignals:Object.keys(topics).length>0};
+ return {topics,traces,understood};
 }
 export function topTopics(profile,map,limit=5){return Object.entries(profile.topics).filter(([id])=>map[id]).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,limit).map(([id])=>map[id]);}
 export function reasonsFor(profile,lab){
@@ -42,7 +42,7 @@ export function reasonsFor(profile,lab){
  return FACETS.flatMap(facet=>{
   const evidence=lab.evidence.find(e=>e.facet===facet);
   const trace=profile.traces.find(t=>t.labId===lab.id&&t.questionId===evidence.questionId);
-  return trace?[{...evidence,label:trace.label,topicId:Object.keys(lab.topics)[0]}]:[];
+  return trace?[{...evidence,label:trace.label}]:[];
  });
 }
 export function qualifiedLabs(labs,answers){const p=buildProfile(answers);return labs.filter(l=>reasonsFor(p,l).length===MIN_REASONS);}
