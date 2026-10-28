@@ -20,6 +20,8 @@ jobs:
       - uses: actions/checkout@v6
       - name: Check recommendation logic
         run: node --test
+      - name: Check all record content integrity
+        run: npm run content:check
       - name: Check static assets
         run: node scripts/check-site.mjs
       - name: Verify all candidate paths and three-reason coverage

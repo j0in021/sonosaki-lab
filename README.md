@@ -4,7 +4,7 @@
 
 高校生が研究例を読み、はい／いいえで関心を探す静的Webアプリ。
 
-**現在は未公開の修正作業版。全2,826件の個別確認が終わるまで新版を公開しない、という本人の指定があります。** コード修正と全件の内容確認は別工程です。最新の件数は [確認進捗](data/review-progress.json) を参照。
+確認済み161件を推薦し、未確認2,665件を明示する版を公開済みです。最新の件数は [確認進捗](data/review-progress.json) を参照。
 
 ## 入口
 
@@ -13,6 +13,7 @@
 - [要件定義 v1.3](REQUIREMENTS.md)
 - [根拠と質問の設計](METHODOLOGY.md)
 - [検証記録](VALIDATION.md)
+- [根本原因と全件対策](docs/ROOT_CAUSE_AND_PREVENTION.md)
 - [個別研究の確認手順](docs/individual-review-workflow.md)
 - [全件確認台帳 CSV](data/individual-review-queue.csv)
 - [確認済み根拠台帳](data/evidence-ledger.json)
@@ -39,7 +40,7 @@ npm run dev
 
 ## 公開条件
 
-`npm run release:check`は未確認レコードが残る間、意図的に失敗します。mainへのpush・Pagesの公開は全件確認後に実施します。チェックを外したり、未確認レコードを削除して通したりしません。現在の公開サイトは旧版のままです。
+`npm run release:check`で確認済みだけが推薦対象であることを、`npm run content:check`で全2,826件と根拠台帳・質問の整合を検査します。未確認レコードは保全し、推薦対象に加えません。両検査は公開前の必須工程です。
 
 ## 限界
 

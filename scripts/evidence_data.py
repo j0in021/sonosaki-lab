@@ -1,5 +1,6 @@
 """Apply individually reviewed evidence. Keywords never grant recommendation eligibility."""
 import json
+import re
 from pathlib import Path
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
@@ -14,6 +15,7 @@ def reviewed_entries(path=None):
     for e in entries:
         assert e['labId'] not in result, 'Duplicate evidence review'
         assert e['status']=='verified'
+        assert e['intro'].strip()!=e['simplerExplanation'].strip(), (e['labId'],'alternate explanation repeats intro')
         assert e['topics'] and set(e['topics'])<=topic_ids, (e['labId'],'unknown topic')
         assert e['group'] in groups, (e['labId'],'unknown group')
         assert set(x['facet'] for x in e['evidence'])==set(FACETS) and len(e['evidence'])==3
@@ -29,6 +31,9 @@ def reviewed_entries(path=None):
             assert 'locked' not in r['sourceURL'].lower()
         assert len({x['semanticKey'] for x in e['evidence']})==3
         assert len({x['question'] for x in e['evidence']})==3
+        for r in e['evidence']:
+            assert not re.search(r'(ます|です)こと',r['question']), (e['labId'],'mechanical question suffix')
+            assert r['question'].endswith(('？','?')), (e['labId'],'question punctuation missing')
         if 'achievementReview' in e:
             achievement=e['achievementReview']
             assert all(achievement.get(k) for k in ['text','type','sourceURL','sourceLocator','checkedAt'])

@@ -11,7 +11,8 @@
     "audit": "node scripts/audit-reachability.mjs",
     "audit:check": "node scripts/audit-reachability.mjs --check",
     "release:check": "node scripts/check-release.mjs",
-    "questions": "python3 scripts/build_questions.py"
+    "questions": "python3 scripts/build_questions.py",
+    "content:check": "node scripts/check-content.mjs"
   },
   "engines": {
     "node": ">=22"
